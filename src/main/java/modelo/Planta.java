@@ -38,6 +38,14 @@ public class Planta {
 	public void setNombrecientifico(String nombrecientifico) {
 		this.nombrecientifico = nombrecientifico;
 	}
+
+	@Override
+	public String toString() {
+		return "Planta [codigo=" + codigo + ", nombrecomun=" + nombrecomun + ", nombrecientifico=" + nombrecientifico
+				+ "]";
+	}
+	
+	
 	
 	
 	
