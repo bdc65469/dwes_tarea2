@@ -35,6 +35,11 @@ public class Ejemplar {
 	public void setPlanta(Planta planta) {
 		this.planta = planta;
 	}
+
+	@Override
+	public String toString() {
+		return "Ejemplar [id=" + id + ", nombre=" + nombre + "]";
+	}
 	
 	
 
