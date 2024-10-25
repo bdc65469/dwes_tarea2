@@ -49,7 +49,7 @@ public class PlantaDAO {
 	
 	public List<Planta> listadoPlantas() {
 
-		String sqlString = "SELECT * FROM PLANTAS";
+		String sqlString = "SELECT * FROM PLANTAS ORDER BY nombrecomun ASC";
 		ArrayList<Planta> plantas = new ArrayList<Planta>();
 
 		try {
