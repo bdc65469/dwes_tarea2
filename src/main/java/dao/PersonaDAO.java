@@ -13,7 +13,7 @@ public class PersonaDAO {
 	private static Connection con = ConexionBD.getConnection();
 
 	public int insertarPersona(String nombre, String email, Long idCredenciales) {
-		String sqlInsertPersona = "INSERT INTO personas (nombre, email, id_credenciales) VALUES (?, ?, ?)";
+		String sqlInsertPersona = "INSERT INTO personas (nombre, email, idCredenciales) VALUES (?, ?, ?)";
 		int filasAfectadas = 0;
 		try (PreparedStatement ps = con.prepareStatement(sqlInsertPersona, PreparedStatement.RETURN_GENERATED_KEYS)) {
 			ps.setString(1, nombre);
@@ -24,7 +24,7 @@ public class PersonaDAO {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.out.println("Error al crear la persona.");
+			//System.out.println("Error al crear la persona.");
 		}
 
 		return filasAfectadas;

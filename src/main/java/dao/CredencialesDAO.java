@@ -15,7 +15,7 @@ public class CredencialesDAO {
 	 public Long crearCredenciales(String usuario, String contrasena) {
 		 
 		 	Long idCredenciales = 0L;
-	        String sqlInsertCredenciales = "INSERT INTO credenciales (usuario, contrasena) VALUES (?, ?)";
+	        String sqlInsertCredenciales = "INSERT INTO credenciales (usuario, password) VALUES (?, ?)";
 	        
 	        try (PreparedStatement ps = con.prepareStatement(sqlInsertCredenciales, PreparedStatement.RETURN_GENERATED_KEYS)) {
 	            ps.setString(1, usuario);
@@ -32,7 +32,7 @@ public class CredencialesDAO {
 	            }
 			} catch (SQLException e) {
 				e.printStackTrace();
-				System.out.println("Error al insertar las credenciales.");
+				//System.out.println("Error al insertar las credenciales.");
 			}
 	        
 	        return idCredenciales;
