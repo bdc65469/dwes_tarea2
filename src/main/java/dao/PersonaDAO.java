@@ -10,7 +10,11 @@ import conexionBD.ConexionBD;
 
 public class PersonaDAO {
 
-	private static Connection con = ConexionBD.getConnection();
+	private Connection con;
+
+    public PersonaDAO(Connection con) {
+        this.con = con;
+    }
 
 	public int insertarPersona(String nombre, String email, Long idCredenciales) {
 		String sqlInsertPersona = "INSERT INTO personas (nombre, email, idCredenciales) VALUES (?, ?, ?)";

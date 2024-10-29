@@ -14,21 +14,11 @@ import modelo.Planta;
 
 public class EjemplarDAO {
 
-	private static Connection con = ConexionBD.getConnection();
+	private Connection con;
 
-	/*
-	public void añadirEjemplar(Ejemplar e) {
-		String sql = "INSERT INTO ejemplares(nombre, idplanta) VALUES (?, ?)";
-		try (PreparedStatement pstmt = con.prepareStatement(sql)) {
-			pstmt.setString(1, e.getNombre());
-			pstmt.setString(2, e.getPlanta().getCodigo());
-			pstmt.executeUpdate();
-			pstmt.close();
-			con.close();
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-		}
-	}*/
+    public EjemplarDAO(Connection con) {
+        this.con = con;
+    }
 
 	//Me falta añadir lo del mensaje todavia
 	/**

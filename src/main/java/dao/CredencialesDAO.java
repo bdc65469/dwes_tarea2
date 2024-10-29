@@ -11,7 +11,11 @@ import modelo.Credenciales;
 
 public class CredencialesDAO {
 
-	private static Connection con = ConexionBD.getConnection();
+	private Connection con;
+
+    public CredencialesDAO(Connection con) {
+        this.con = con;
+    }
 
 	public Long crearCredenciales(String usuario, String contrasena) {
 

@@ -12,7 +12,11 @@ import modelo.Planta;
 
 public class PlantaDAO {
 
-	private static Connection con = ConexionBD.getConnection();
+	private Connection con;
+
+    public PlantaDAO(Connection con) {
+        this.con = con;
+    }
 
 	public int añadirPlanta(Planta planta) {
 		int filas = 0;
