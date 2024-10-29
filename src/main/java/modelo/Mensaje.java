@@ -7,20 +7,18 @@ public class Mensaje {
 	private Long id;
 	private LocalDate fechahora;
 	private String mensaje;
+	private Long idEjemplar;
+	private Long idPersona;
 	
 	public Mensaje() {}
 
-	public Mensaje(Long id, LocalDate fechahora, String mensaje) {
+	public Mensaje(Long id, LocalDate fechahora, String mensaje, Long idEjemplar, Long idPersona) {
 		super();
 		this.id = id;
 		this.fechahora = fechahora;
 		this.mensaje = mensaje;
-	}
-
-	public Mensaje(LocalDate fechahora, String mensaje) {
-		super();
-		this.fechahora = fechahora;
-		this.mensaje = mensaje;
+		this.idEjemplar = idEjemplar;
+		this.idPersona = idPersona;
 	}
 
 	public Long getId() {
@@ -46,6 +44,30 @@ public class Mensaje {
 	public void setMensaje(String mensaje) {
 		this.mensaje = mensaje;
 	}
+
+	public Long getIdEjemplar() {
+		return idEjemplar;
+	}
+
+	public void setIdEjemplar(Long idEjemplar) {
+		this.idEjemplar = idEjemplar;
+	}
+
+	public Long getIdPersona() {
+		return idPersona;
+	}
+
+	public void setIdPersona(Long idPersona) {
+		this.idPersona = idPersona;
+	}
+
+	@Override
+	public String toString() {
+		return "Mensaje [id=" + id + ", fechahora=" + fechahora + ", mensaje=" + mensaje + ", idEjemplar=" + idEjemplar
+				+ ", idPersona=" + idPersona + "]";
+	}
+
+	
 	
 	
 	

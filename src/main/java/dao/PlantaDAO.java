@@ -13,40 +13,23 @@ import modelo.Planta;
 public class PlantaDAO {
 
 	private static Connection con = ConexionBD.getConnection();
-	
-	
-	public void añadirPlanta (Planta planta) {
+
+	public int añadirPlanta(Planta planta) {
+		int filas = 0;
 		String sql = "INSERT INTO plantas(codigo, nombrecomun, nombrecientifico) VALUES (?, ?, ?)";
 		try (PreparedStatement pstmt = con.prepareStatement(sql)) {
-		    pstmt.setString(1, planta.getCodigo().toUpperCase()); //El código siempre debe ir en mayusculas
-		    pstmt.setString(2, planta.getNombrecomun());
-		    pstmt.setString(3, planta.getNombrecientifico());
-		    
-		    pstmt.executeUpdate();
-		    pstmt.close();
-		    con.close();
+			pstmt.setString(1, planta.getCodigo().toUpperCase()); // El código siempre debe ir en mayusculas
+			pstmt.setString(2, planta.getNombrecomun());
+			pstmt.setString(3, planta.getNombrecientifico());
+
+			filas = pstmt.executeUpdate();
+
 		} catch (SQLException e) {
-		    e.printStackTrace(); 
+			e.printStackTrace();
 		}
+		return filas;
 	}
-	
-	
-	public void borrarPlanta(String codigo) {
-	    String sql = "DELETE FROM plantas WHERE codigo = ?";
-	    try (PreparedStatement pstmt = con.prepareStatement(sql)) {
-	        pstmt.setString(1, codigo);
-	        int filasafectadas = pstmt.executeUpdate();
-	        
-	        if (filasafectadas > 0) {
-	            System.out.println("Planta eliminada con éxito.");
-	        } else {
-	            System.out.println("No se encontró ninguna planta con el código: " + codigo);
-	        }
-	    } catch (SQLException e) {
-	        e.printStackTrace(); 
-	    }
-	}
-	
+
 	public List<Planta> listadoPlantas() {
 
 		String sqlString = "SELECT * FROM PLANTAS ORDER BY nombrecomun ASC";
@@ -61,7 +44,6 @@ public class PlantaDAO {
 				nueva.setCodigo(rs.getString("codigo"));
 				nueva.setNombrecomun(rs.getString("nombrecomun"));
 				nueva.setNombrecientifico(rs.getString("nombrecientifico"));
-		
 
 				plantas.add(nueva);
 			}
@@ -72,14 +54,15 @@ public class PlantaDAO {
 
 		return plantas;
 	}
-	
+
 	/**
 	 * Metodo para comprobar si existe un codigo de planta dentro de la BD
+	 * 
 	 * @param codigo codigo de la planta
 	 * @return true si ya existe el codigo, false si el codigo no existe
 	 */
 	public boolean existeCodigo(String codigo) {
-		
+
 		String sqlString = "SELECT codigo FROM PLANTAS";
 		ArrayList<String> codigos = new ArrayList<String>();
 
@@ -97,29 +80,28 @@ public class PlantaDAO {
 
 		if (codigos.contains(codigo.toUpperCase())) {
 			return true;
-		}else {
+		} else {
 			return false;
 		}
-		
+
 	}
 
 	public int actualizarPlanta(Planta planta, String nombrecomun, String nombrecientifico) {
-	    String sql = "UPDATE plantas SET nombrecomun = ?, nombrecientifico = ? WHERE codigo = ?";
-	    int filasAfectadas = 0;
-	    try (PreparedStatement pstmt = con.prepareStatement(sql)) {
-	        
-	        pstmt.setString(1, nombrecomun);
-	        pstmt.setString(2, nombrecientifico);
-	        pstmt.setString(3, planta.getCodigo().toUpperCase());
+		String sql = "UPDATE plantas SET nombrecomun = ?, nombrecientifico = ? WHERE codigo = ?";
+		int filasAfectadas = 0;
+		try (PreparedStatement pstmt = con.prepareStatement(sql)) {
 
-	        filasAfectadas = pstmt.executeUpdate();
-	        
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-	    
-	    return filasAfectadas;
+			pstmt.setString(1, nombrecomun);
+			pstmt.setString(2, nombrecientifico);
+			pstmt.setString(3, planta.getCodigo().toUpperCase());
+
+			filasAfectadas = pstmt.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return filasAfectadas;
 	}
-
 
 }

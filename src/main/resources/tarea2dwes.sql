@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 24-10-2024 a las 14:19:29
+-- Tiempo de generación: 29-10-2024 a las 12:53:50
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -35,6 +35,13 @@ CREATE TABLE `credenciales` (
   `password` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `credenciales`
+--
+
+INSERT INTO `credenciales` (`id`, `usuario`, `password`) VALUES
+(2, 'pepe1', 'pepe12345');
+
 -- --------------------------------------------------------
 
 --
@@ -56,7 +63,9 @@ CREATE TABLE `ejemplares` (
 CREATE TABLE `mensajes` (
   `id` int(11) NOT NULL,
   `fechaHora` datetime NOT NULL,
-  `mensaje` varchar(500) NOT NULL
+  `mensaje` varchar(500) NOT NULL,
+  `idEjemplar` int(11) NOT NULL,
+  `idPersona` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -71,6 +80,13 @@ CREATE TABLE `personas` (
   `email` varchar(50) NOT NULL,
   `idCredenciales` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `personas`
+--
+
+INSERT INTO `personas` (`id`, `nombre`, `email`, `idCredenciales`) VALUES
+(1, 'pepe', 'pepe@gmail.com', 2);
 
 -- --------------------------------------------------------
 
@@ -89,20 +105,9 @@ CREATE TABLE `plantas` (
 --
 
 INSERT INTO `plantas` (`codigo`, `nombrecomun`, `nombrecientifico`) VALUES
-('MARGARITA', 'MARGARITA', 'MARGARITAE'),
-('ROSA', 'Rosa', 'Rosae');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `seguimientos`
---
-
-CREATE TABLE `seguimientos` (
-  `idEjemplar` int(11) NOT NULL,
-  `idPersona` int(11) NOT NULL,
-  `idMensaje` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+('GRSOL', 'girasol', 'girasolarium'),
+('MARGARITA', 'marga', 'margarita'),
+('ROSA', 'rosaa', 'rosaemarin');
 
 --
 -- Índices para tablas volcadas
@@ -126,7 +131,9 @@ ALTER TABLE `ejemplares`
 -- Indices de la tabla `mensajes`
 --
 ALTER TABLE `mensajes`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fkejemplar_mensaje` (`idEjemplar`),
+  ADD KEY `fkpersona_mensaje` (`idPersona`);
 
 --
 -- Indices de la tabla `personas`
@@ -143,14 +150,6 @@ ALTER TABLE `plantas`
   ADD PRIMARY KEY (`codigo`);
 
 --
--- Indices de la tabla `seguimientos`
---
-ALTER TABLE `seguimientos`
-  ADD PRIMARY KEY (`idEjemplar`,`idPersona`,`idMensaje`),
-  ADD KEY `fkmensajes` (`idMensaje`),
-  ADD KEY `fkpersonas` (`idPersona`);
-
---
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
@@ -158,7 +157,7 @@ ALTER TABLE `seguimientos`
 -- AUTO_INCREMENT de la tabla `credenciales`
 --
 ALTER TABLE `credenciales`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `ejemplares`
@@ -176,7 +175,7 @@ ALTER TABLE `mensajes`
 -- AUTO_INCREMENT de la tabla `personas`
 --
 ALTER TABLE `personas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Restricciones para tablas volcadas
@@ -189,18 +188,17 @@ ALTER TABLE `ejemplares`
   ADD CONSTRAINT `fkplanta` FOREIGN KEY (`idplanta`) REFERENCES `plantas` (`codigo`);
 
 --
+-- Filtros para la tabla `mensajes`
+--
+ALTER TABLE `mensajes`
+  ADD CONSTRAINT `fkejemplar_mensaje` FOREIGN KEY (`idEjemplar`) REFERENCES `ejemplares` (`id`),
+  ADD CONSTRAINT `fkpersona_mensaje` FOREIGN KEY (`idPersona`) REFERENCES `personas` (`id`);
+
+--
 -- Filtros para la tabla `personas`
 --
 ALTER TABLE `personas`
   ADD CONSTRAINT `fkcredenciales` FOREIGN KEY (`idCredenciales`) REFERENCES `credenciales` (`id`);
-
---
--- Filtros para la tabla `seguimientos`
---
-ALTER TABLE `seguimientos`
-  ADD CONSTRAINT `fkejemplares` FOREIGN KEY (`idEjemplar`) REFERENCES `ejemplares` (`id`),
-  ADD CONSTRAINT `fkmensajes` FOREIGN KEY (`idMensaje`) REFERENCES `mensajes` (`id`),
-  ADD CONSTRAINT `fkpersonas` FOREIGN KEY (`idPersona`) REFERENCES `personas` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
