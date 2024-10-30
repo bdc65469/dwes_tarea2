@@ -7,8 +7,7 @@ import dao.PlantaDAO;
 
 public class Comprobaciones {
 
-	private static PlantaDAO plantaDao = new PlantaDAO();
-
+	/*
 	public static boolean validarCodigoPlanta(String codigo) {
 
 		if (!caracteresCodigo(codigo)) {
@@ -16,6 +15,7 @@ public class Comprobaciones {
 			return false;
 		}
 
+		
 		if (plantaDao.existeCodigo(codigo)) {
 			System.out.println("El codigo ya existe en la base de datos");
 			return false;
@@ -23,7 +23,7 @@ public class Comprobaciones {
 
 		return true;
 
-	}
+	}*/
 
 	/**
 	 * Método para comprobar que el codigo no contiene ni espacios, ni caracteres

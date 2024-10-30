@@ -3,17 +3,26 @@ package controlador;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import conexionBD.ConexionBDD;
 import dao.EjemplarDAO;
 import dao.PlantaDAO;
 import modelo.Planta;
 
 public class ServiciosEjemplar {
 	
-	public static void crearEjemplar() {
+	private ConexionBDD factoria;
+	private PlantaDAO plantaDao;
+	private EjemplarDAO ejemplarDao;
+	
+	public ServiciosEjemplar() {
+		factoria = ConexionBDD.getCon();
+		plantaDao = factoria.getPlantaDAO();
+		ejemplarDao = factoria.getEjemplarDAO();
+	}
+	
+	public void crearEjemplar() {
 		Scanner teclado = new Scanner(System.in);
-		PlantaDAO plantaDao = new PlantaDAO();
-		EjemplarDAO ej = new EjemplarDAO();
-		ServiciosPlanta.verListaPlantas();
+		//ServiciosPlanta.verListaPlantas();
 		int numFinal = plantaDao.listadoPlantas().size();
 		int num = 0;
 		do {
@@ -28,7 +37,7 @@ public class ServiciosEjemplar {
 					escogida.setCodigo(plantaDao.listadoPlantas().get(num - 1).getCodigo());
 					escogida.setNombrecientifico(plantaDao.listadoPlantas().get(num - 1).getNombrecientifico());
 					escogida.setNombrecomun(plantaDao.listadoPlantas().get(num - 1).getNombrecomun());
-					if (ej.crearEjemplar(escogida) > 0) {
+					if (ejemplarDao.crearEjemplar(escogida) > 0) {
 						System.out.println("Ejemplar añadido correctamente");
 					} else {
 						System.out.println("No se pudo añadir el ejemplar");

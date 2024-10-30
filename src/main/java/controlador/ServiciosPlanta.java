@@ -1,24 +1,34 @@
 package controlador;
 
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
+import conexionBD.ConexionBDD;
 import dao.PlantaDAO;
 import modelo.Planta;
 
 public class ServiciosPlanta {
 	
-	public static void añadirPlanta(Planta p) {
-		PlantaDAO plantaDao = new PlantaDAO();
+	private ConexionBDD factoria;
+	private PlantaDAO plantaDao;
+	
+	public ServiciosPlanta() {
+		factoria = factoria.getCon();
+		plantaDao = factoria.getPlantaDAO();
+	}
+	
+	/*
+	public void añadirPlanta(Planta p) {
 		if (Comprobaciones.validarCodigoPlanta(p.getCodigo())) {
 			plantaDao.añadirPlanta(p);
 			System.out.println("Planta añadida correctamente");
 		}
-	}
+	}*/
 
-	public static void actualizarPlanta() {
+	/*
+	public void actualizarPlanta() {
 		Scanner teclado = new Scanner(System.in);
-		PlantaDAO plantaDao = new PlantaDAO();
 		verListaPlantas();
 		int numFinal = plantaDao.listadoPlantas().size();
 		int num = 0;
@@ -52,20 +62,11 @@ public class ServiciosPlanta {
 
 		} while (num < 1 || num > numFinal);
 
+	}*/
+	
+	public List<Planta> listaPlantas(){
+		return plantaDao.listadoPlantas();
 	}
 
-	public static void verListaPlantas() {
-		PlantaDAO plantaDao = new PlantaDAO();
-		if (plantaDao.listadoPlantas().size() == 0) {
-			System.out.println("No hay plantas almacenadas");
-		} else {
-			System.out.println("Lista de plantas");
-			for (int i = 0; i < plantaDao.listadoPlantas().size(); i++) {
-				int numero = i + 1;
-				System.out.println(numero + "ª " + plantaDao.listadoPlantas().get(i));
-			}
-		}
-
-	}
 
 }

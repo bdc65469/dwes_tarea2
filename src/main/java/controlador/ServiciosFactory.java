@@ -22,5 +22,13 @@ public class ServiciosFactory {
 	public ServiciosPlanta getServiciosPlanta() {
 		return new ServiciosPlanta();
 	}
+	
+	public ServiciosMensaje getServiciosMensaje() {
+		return new ServiciosMensaje();
+	}
+	
+	public ServiciosCredenciales getServiciosCredenciales() {
+		return new ServiciosCredenciales();
+	}
 
 }

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import conexionBD.ConexionBD;
 import modelo.Ejemplar;
 import modelo.Planta;
 

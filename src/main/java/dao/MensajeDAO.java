@@ -9,7 +9,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import conexionBD.ConexionBD;
 import modelo.Ejemplar;
 import modelo.Mensaje;
 import modelo.Persona;

@@ -2,15 +2,24 @@ package controlador;
 
 import java.util.Scanner;
 
+import conexionBD.ConexionBDD;
 import dao.CredencialesDAO;
 import dao.PersonaDAO;
 
 public class ServiciosPersona {
 	
-	public static void crearUsuario() {
+	private ConexionBDD factoria;
+	private PersonaDAO personaDao;
+	private CredencialesDAO credencialesDao;
+	
+	public ServiciosPersona() {
+		factoria = ConexionBDD.getCon();
+		personaDao = factoria.getPersonaDAO();
+		credencialesDao = factoria.getCredencialesDAO();
+	}
+	
+	public void crearUsuario() {
 		Scanner teclado = new Scanner(System.in);
-		PersonaDAO p = new PersonaDAO();
-		CredencialesDAO c = new CredencialesDAO();
 		System.out.println("Introduce el nombre de la persona: ");
 		String nombre = teclado.nextLine();
 
@@ -23,10 +32,10 @@ public class ServiciosPersona {
 				System.out.println("El email no puede contener espacios en blanco");
 			}
 
-			if (p.existeEmail(email)) {
+			if (personaDao.existeEmail(email)) {
 				System.out.println("El email ya existe");
 			}
-		} while (Comprobaciones.comprobarEspaciosBlanco(email) || p.existeEmail(email));
+		} while (Comprobaciones.comprobarEspaciosBlanco(email) || personaDao.existeEmail(email));
 		
 		
 		String usuario = "";
@@ -39,10 +48,10 @@ public class ServiciosPersona {
 				System.out.println("El usuario no puede contener espacios en blanco");
 			}
 
-			if (c.existeUsuario(usuario)) {
+			if (credencialesDao.existeUsuario(usuario)) {
 				System.out.println("El usuario ya existe");
 			}
-		} while (Comprobaciones.comprobarEspaciosBlanco(usuario) || c.existeUsuario(usuario));
+		} while (Comprobaciones.comprobarEspaciosBlanco(usuario) || credencialesDao.existeUsuario(usuario));
 		
 		String password = "";
 		
@@ -59,7 +68,7 @@ public class ServiciosPersona {
 			}
 		} while (!Comprobaciones.esContrasenaValida(password) || Comprobaciones.comprobarEspaciosBlanco(password));
 		
-		int filas = p.insertarPersona(nombre, email, c.crearCredenciales(usuario, password));
+		int filas = personaDao.insertarPersona(nombre, email, credencialesDao.crearCredenciales(usuario, password));
 		if (filas>0) {
 			System.out.println("Usuario creado correctamente");
 		}else {
