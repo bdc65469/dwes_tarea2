@@ -3,6 +3,7 @@ package vista;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import controlador.Comprobaciones;
 import controlador.ServiciosCredenciales;
 import controlador.ServiciosEjemplar;
 import controlador.ServiciosFactory;
@@ -52,7 +53,8 @@ public class Fachada {
 		System.out.println("2.  Gestionar plantas.");
 		System.out.println("3.  Gestionar ejemplares.");
 		System.out.println("4.  Gestionar mensajes.");
-		System.out.println("0.  Salir.");
+		System.out.println("5.  Cerrar sesión.");
+		System.out.println("0.  Cerrar aplicación.");
 		System.out.println("Seleccione una opcion:");
 	}
 
@@ -93,7 +95,7 @@ public class Fachada {
 	public void menuUsuarioRegistrado(String usuario) {
 		System.out.println("");
 		System.out.println("***********************************************");
-		System.out.println("Bienvenido " + usuario);
+		System.out.println("Bienvenido/a " + usuario);
 		System.out.println("1.  Gestionar mensajes.");
 		System.out.println("2.  Cerrar sesión.");
 		System.out.println("0.  Cerrar aplicación.");
@@ -134,7 +136,7 @@ public class Fachada {
 						s.setUsuario(usuario);
 						s.setPerfil(Perfil.REGISTRADO);
 						if (usuario.equals("admin")) {
-							this.menuAdministrador();
+							this.mostrarMenuAdministrador(s);
 							s.setPerfil(Perfil.ADMIN);
 						} else {
 							this.mostrarMenuUsuarioRegistrado(s);
@@ -233,4 +235,95 @@ public class Fachada {
 		} while (sesionActiva);
 	}
 
+	public void mostrarMenuAdministrador (Sesion s) {
+		
+		Scanner teclado = new Scanner(System.in);
+		int opcion = -1;
+		do {
+			this.menuAdministrador();
+			try {
+				opcion = teclado.nextInt();
+				teclado.nextLine();
+				if (opcion < 0 || opcion > 5) {
+					System.out.println("Opción fuera de rango. Inténtelo de nuevo.");
+					continue;
+				}
+
+				switch (opcion) {
+				case 1:
+					System.out.println("Introduce el nombre de la persona: ");
+					String nombre = teclado.nextLine();
+					
+					String email = "";
+					do {
+						System.out.println("Introduce el email de la persona: ");
+						email = teclado.nextLine();
+
+						if (Comprobaciones.comprobarEspaciosBlanco(email)) {
+							System.out.println("El email no puede contener espacios en blanco");
+						}
+
+						if (personaServ.existeEmail(email)) {
+							System.out.println("El email ya existe");
+						}
+					} while (Comprobaciones.comprobarEspaciosBlanco(email) || personaServ.existeEmail(email));
+					
+					String usuario = "";
+					
+					do {
+						System.out.println("Introduce el usuario de la persona: ");
+						usuario = teclado.nextLine();
+
+						if (Comprobaciones.comprobarEspaciosBlanco(usuario)) {
+							System.out.println("El usuario no puede contener espacios en blanco");
+						}
+
+						if (credendialesServ.existeUsuario(usuario)) {
+							System.out.println("El usuario ya existe");
+						}
+					} while (Comprobaciones.comprobarEspaciosBlanco(usuario) || credendialesServ.existeUsuario(usuario));
+					
+					String password = "";
+					do {
+						System.out.println("Introduce la contraseña de la persona: ");
+						password = teclado.nextLine();
+
+						if (Comprobaciones.comprobarEspaciosBlanco(password)) {
+							System.out.println("La contraseña no puede contener espacios en blanco");
+						}
+
+						if (!Comprobaciones.esContrasenaValida(password)) {
+							System.out.println("La contraseña no es válida. Recuerda que la contraseña tiene que tener una longitud de 6 carácteres minimo, incluyendo una letra y un número mínimo");
+						}
+					} while (!Comprobaciones.esContrasenaValida(password) || Comprobaciones.comprobarEspaciosBlanco(password));
+					
+					if (personaServ.crearUsuario(nombre, email, usuario, password)>0) {
+						System.out.println("Usuario registrado correctamente");
+					}else {
+						System.out.println("No se ha podido registrar el usuario");
+					}
+					break;
+				case 2:
+					break;
+				case 3:
+					break;
+				case 4:
+					break;
+				case 5:
+					System.out.println("Hasta luego " + s.getUsuario());
+					s.cerrarSesion();
+					this.mostrarMenuInvitado();
+					break;
+				case 0:
+					sesionActiva = false;
+					break;
+				}
+			} catch (InputMismatchException e) {
+				System.out.println("Entrada inválida. Por favor, ingrese un número entero.");
+				teclado.next();
+			}
+
+		} while (sesionActiva);
+		
+	}
 }

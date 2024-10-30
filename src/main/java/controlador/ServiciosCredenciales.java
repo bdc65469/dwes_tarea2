@@ -48,5 +48,9 @@ public class ServiciosCredenciales {
 		}
 		return valido;
 	}
+	
+	public boolean existeUsuario (String usuario) {
+		return credencialesDao.existeUsuario(usuario);
+	}
 
 }
