@@ -1,5 +1,6 @@
 package vista;
 
+import java.time.LocalDate;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -12,6 +13,9 @@ import controlador.ServiciosPersona;
 import controlador.ServiciosPlanta;
 import controlador.Sesion;
 import controlador.Sesion.Perfil;
+import modelo.Ejemplar;
+import modelo.Mensaje;
+import modelo.Planta;
 
 public class Fachada {
 
@@ -72,9 +76,9 @@ public class Fachada {
 		System.out.println("");
 		System.out.println("***********************************************");
 		System.out.println("Menú Gestión de Ejemplares");
-		System.out.println("1.  Introduce el número de la planta de la que quieres crear un ejemplar.");
-		System.out.println("2.  Introduce el número de la planta/as que quieres ver sus ejemplares .");
-		System.out.println("3.  Introduce el número del ejemplar que quieres ver sus mensajes .");
+		System.out.println("1.  Crear ejemplar de una planta.");
+		System.out.println("2.  Ver ejemplares de planta/as .");
+		System.out.println("3.  Ver mensajes de un ejemplar .");
 		System.out.println("0.  Salir.");
 		System.out.println("Seleccione una opcion:");
 	}
@@ -96,8 +100,9 @@ public class Fachada {
 		System.out.println("");
 		System.out.println("***********************************************");
 		System.out.println("Bienvenido/a " + usuario);
-		System.out.println("1.  Gestionar mensajes.");
-		System.out.println("2.  Cerrar sesión.");
+		System.out.println("1.  Gestionar ejemplares.");
+		System.out.println("2.  Gestionar mensajes.");
+		System.out.println("3.  Cerrar sesión.");
 		System.out.println("0.  Cerrar aplicación.");
 		System.out.println("Seleccione una opcion:");
 	}
@@ -167,16 +172,19 @@ public class Fachada {
 			try {
 				opcion = teclado.nextInt();
 				teclado.nextLine();
-				if (opcion < 0 || opcion > 2) {
+				if (opcion < 0 || opcion > 3) {
 					System.out.println("Opción fuera de rango. Inténtelo de nuevo.");
 					continue;
 				}
 
 				switch (opcion) {
 				case 1:
-					this.mostrarMenuGestionarMensajes(s);
+					this.mostrarMenuGestionEjemplares(s);
 					break;
 				case 2:
+					this.mostrarMenuGestionarMensajes(s);
+					break;
+				case 3:
 					System.out.println("Hasta luego " + s.getUsuario());
 					s.cerrarSesion();
 					this.mostrarMenuInvitado();
@@ -277,11 +285,15 @@ public class Fachada {
 						if (Comprobaciones.comprobarEspaciosBlanco(usuario)) {
 							System.out.println("El usuario no puede contener espacios en blanco");
 						}
+						
+						if (usuario.equalsIgnoreCase("admin")) {
+							System.out.println("Nombre de usuario reservado.");
+						}
 
 						if (credendialesServ.existeUsuario(usuario)) {
 							System.out.println("El usuario ya existe");
 						}
-					} while (Comprobaciones.comprobarEspaciosBlanco(usuario) || credendialesServ.existeUsuario(usuario));
+					} while (Comprobaciones.comprobarEspaciosBlanco(usuario) || credendialesServ.existeUsuario(usuario) || usuario.equalsIgnoreCase("admin"));
 					
 					String password = "";
 					do {
@@ -304,10 +316,13 @@ public class Fachada {
 					}
 					break;
 				case 2:
+					this.mostrarMenuGestionarPlantas();
 					break;
 				case 3:
+					this.mostrarMenuGestionEjemplares(s);
 					break;
 				case 4:
+					this.mostrarMenuGestionarMensajes(s);
 					break;
 				case 5:
 					System.out.println("Hasta luego " + s.getUsuario());
@@ -325,5 +340,200 @@ public class Fachada {
 
 		} while (sesionActiva);
 		
+	}
+	
+	public void mostrarMenuGestionarPlantas() {
+		
+		Scanner teclado = new Scanner(System.in);
+		int opcion = -1;
+		do {
+			this.menuGestionarPlantas();
+			try {
+				opcion = teclado.nextInt();
+				teclado.nextLine();
+				if (opcion < 0 || opcion > 2) {
+					System.out.println("Opción fuera de rango. Inténtelo de nuevo.");
+					continue;
+				}
+
+				switch (opcion) {
+				case 1:
+					String codigo = "";
+					do {
+						System.out.println("Introduce el codigo de la planta (Sin números, espacios, dierisis o carácteres especiales)");
+						codigo = teclado.nextLine();
+						
+						if (!Comprobaciones.esCodigoValido(codigo)) {
+							System.out.println("Formato de codigo incorrecto. Recuerda que no puede contener números, espacios, dierisis o carácteres especiales");
+						}
+						
+						
+						if (plantaServ.existeCodigoPlanta(codigo)) {
+							System.out.println("Ya existe una planta con ese codigo");
+						}
+						
+					}while (!Comprobaciones.esCodigoValido(codigo) || plantaServ.existeCodigoPlanta(codigo));
+					
+					String nombrecomun = "";
+					do {
+						System.out.println("Introduce el nombre común de la planta. ");
+						nombrecomun = teclado.nextLine();
+						
+						if (!Comprobaciones.nombreValido(nombrecomun)) {
+							System.out.println("Nombre comun incorrecto. No puede contener número o solo espacios");
+						}
+					}while (!Comprobaciones.nombreValido(nombrecomun));
+					
+					String nombrecientifico = "";
+					do {
+						System.out.println("Introduce el nombre científico de la planta");
+						nombrecientifico = teclado.nextLine();
+						
+						if (!Comprobaciones.nombreValido(nombrecientifico)) {
+							System.out.println("Nombre científico incorrecto. No puede contener número o solo espacios");
+						}
+					}while (!Comprobaciones.nombreValido(nombrecientifico));
+
+					
+					Planta nueva = new Planta (codigo.toUpperCase(), nombrecomun, nombrecientifico);
+					
+					if (plantaServ.añadirPlanta(nueva)>0) {
+						System.out.println("Planta añadida correctamente");
+					}else {
+						System.out.println("No se pudo añadir la planta");
+					}				
+					
+					break;
+				case 2:
+					System.out.println("Lista de plantas");
+					for (int i = 0; i < plantaServ.listaPlantas().size(); i++) {
+						int numero = i + 1;
+						System.out.println(numero + "ª " + plantaServ.listaPlantas().get(i));
+					}
+					int numFinal = plantaServ.listaPlantas().size();
+					int num = 0;
+					do {
+						try {
+							System.out.println("Introduce el numero de la planta que quieres modificar: ");
+							num = teclado.nextInt();
+							teclado.nextLine();
+							if (num < 1 || num > numFinal) {
+								System.out
+										.println("Numero incorrecto. Tienes que introducir un número entre el 1 y el " + numFinal);
+							} else {
+								String actnombrecomun = "";
+								do {
+									System.out.println("Introduce el nuevo nombre común de la planta. ");
+									actnombrecomun = teclado.nextLine();
+									
+									if (!Comprobaciones.nombreValido(actnombrecomun)) {
+										System.out.println("Nombre comun incorrecto. No puede contener número o solo espacios");
+									}
+								}while (!Comprobaciones.nombreValido(actnombrecomun));
+								
+								String nombrecien = "";
+								do {
+									System.out.println("Introduce el nuevo nombre científico de la planta");
+									nombrecien = teclado.nextLine();
+									
+									if (!Comprobaciones.nombreValido(nombrecien)) {
+										System.out.println("Nombre científico incorrecto. No puede contener número o solo espacios");
+									}
+								}while (!Comprobaciones.nombreValido(nombrecien));
+								if (plantaServ.actualizarPlanta(plantaServ.listaPlantas().get(num-1), actnombrecomun, nombrecien)>0) {
+									System.out.println("Actualizado correctamente");
+								} else {
+									System.out.println("No se ha podido actualizar");
+								}
+							}
+						} catch (InputMismatchException e) {
+							System.out.println("Error. Debes introducir un número");
+							teclado.nextLine(); // Limpiar el buffer del scanner
+						}
+
+					} while (num < 1 || num > numFinal);
+					break;
+				
+				case 0:
+					break;
+				}
+			} catch (InputMismatchException e) {
+				System.out.println("Entrada inválida. Por favor, ingrese un número entero.");
+				teclado.next();
+			}
+
+		} while (opcion != 0);
+		
+	}
+	
+	public void mostrarMenuGestionEjemplares (Sesion s) {
+		Scanner teclado = new Scanner(System.in);
+		int opcion = -1;
+		do {
+			this.menuGestionarEjemplares();
+			try {
+				opcion = teclado.nextInt();
+				teclado.nextLine();
+				if (opcion < 0 || opcion > 3) {
+					System.out.println("Opción fuera de rango. Inténtelo de nuevo.");
+					continue;
+				}
+
+				switch (opcion) {
+				case 1:
+					System.out.println("Lista de plantas");
+					for (int i = 0; i < plantaServ.listaPlantas().size(); i++) {
+						int numero = i + 1;
+						System.out.println(numero + "ª " + plantaServ.listaPlantas().get(i));
+					}
+					int numFinal = plantaServ.listaPlantas().size();
+					int num = 0;
+					do {
+						try {
+							System.out.println("Introduce el numero de la planta que quieres crear un ejemplar: ");
+							num = teclado.nextInt();
+							teclado.nextLine();
+							if (num < 1 || num > numFinal) {
+								System.out
+										.println("Numero incorrecto. Tienes que introducir un número entre el 1 y el " + numFinal);
+							} else {
+								Planta escogida = new Planta();
+								escogida.setCodigo(plantaServ.listaPlantas().get(num - 1).getCodigo());
+								escogida.setNombrecientifico(plantaServ.listaPlantas().get(num - 1).getNombrecientifico());
+								escogida.setNombrecomun(plantaServ.listaPlantas().get(num - 1).getNombrecomun());
+							    Ejemplar nuevoEjemplar = ejemplarServ.crearEjemplar(escogida);
+							    if (nuevoEjemplar==null) {
+							    	System.out.println("Error al crear el ejemplar");
+							    }else {
+							    	System.out.println("Introduce el mensaje que quieres añadir al ejemplar.");
+								    String mensaje = teclado.nextLine();
+								    Mensaje nuevo = new Mensaje (LocalDate.now(), mensaje, nuevoEjemplar.getId(), personaServ.obtenerIdPersonaPorUsuario(s.getUsuario()));
+								    if(mensajeServ.crearMensaje(nuevo)>0) {
+								    	System.out.println("Se ha creado el ejemplar con el mensaje correspondiente correctamente.");
+								    }
+							    }
+							  
+							}
+						} catch (InputMismatchException e) {
+							System.out.println("Error. Debes introducir un número");
+							teclado.nextLine(); // Limpiar el buffer del scanner
+						}
+
+					} while (num < 1 || num > numFinal);					
+					break;
+				case 2:
+				
+					break;
+				case 3:
+					break;
+				case 0:
+					break;
+				}
+			} catch (InputMismatchException e) {
+				System.out.println("Entrada inválida. Por favor, ingrese un número entero.");
+				teclado.next();
+			}
+
+		} while (opcion != 0);
 	}
 }

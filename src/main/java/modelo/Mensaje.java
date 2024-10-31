@@ -21,6 +21,14 @@ public class Mensaje {
 		this.idPersona = idPersona;
 	}
 
+	public Mensaje(LocalDate fechahora, String mensaje, Long idEjemplar, Long idPersona) {
+		super();
+		this.fechahora = fechahora;
+		this.mensaje = mensaje;
+		this.idEjemplar = idEjemplar;
+		this.idPersona = idPersona;
+	}
+
 	public Long getId() {
 		return id;
 	}

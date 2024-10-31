@@ -14,6 +14,28 @@ public class PersonaDAO {
     public PersonaDAO(Connection con) {
         this.con = con;
     }
+    
+    public Long obtenerIdporUsuario(String usuario) {
+    	Long idPersona = null;
+        
+        String query = "SELECT p.id FROM personas p " +
+                       "JOIN credenciales c ON p.idCredenciales = c.id " +
+                       "WHERE c.usuario = ?";
+        
+        try ( PreparedStatement statement = con.prepareStatement(query)) {
+             
+            statement.setString(1, usuario);
+            ResultSet resultSet = statement.executeQuery();
+            
+            if (resultSet.next()) {
+                idPersona = resultSet.getLong("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return idPersona;
+    }
 
 	public int insertarPersona(String nombre, String email, Long idCredenciales) {
 		String sqlInsertPersona = "INSERT INTO personas (nombre, email, idCredenciales) VALUES (?, ?, ?)";

@@ -26,5 +26,9 @@ public class ServiciosPersona {
 		return personaDao.insertarPersona(nombre, email, credencialesDao.crearCredenciales(usuario, password));
 		
 	}
+	
+	public Long obtenerIdPersonaPorUsuario(String usuario) {
+		return personaDao.obtenerIdporUsuario(usuario);
+	}
 
 }

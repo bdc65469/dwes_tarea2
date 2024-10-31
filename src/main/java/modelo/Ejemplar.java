@@ -12,6 +12,12 @@ public class Ejemplar {
 		this.nombre = planta.getCodigo()+"_"+this.id;
 	}
 
+	public Ejemplar(Long id, String nombre) {
+		super();
+		this.id = id;
+		this.nombre = nombre;
+	}
+
 	public Long getId() {
 		return id;
 	}
