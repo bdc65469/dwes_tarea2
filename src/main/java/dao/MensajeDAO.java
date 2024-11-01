@@ -44,30 +44,29 @@ public class MensajeDAO {
 		return filasInsertadas;
 	}
 
-	public List<Mensaje> obtenerMensajesDeEjemplar(Ejemplar ejemplar) {
-		String sqlString = "SELECT m.id, m.fechahora, m.mensaje, m.idEjemplar, m.idPersona,"
-				+ "p.nombre AS nombrePersona, p.email AS emailPersona" + "FROM mensajes m"
-				+ "JOIN personas p ON m.idPersona = p.id" + "WHERE m.idEjemplar = ?" + "ORDER BY m.fechaHora ASC";
+	public List<Mensaje> obtenerMensajesDeEjemplar(Long idejemplar) {
+		String sqlString = "SELECT m.id, m.fechaHora, m.mensaje, m.idEjemplar, m.idPersona, "
+                + "p.nombre, p.email "
+                + "FROM mensajes m "
+                + "JOIN personas p ON m.idPersona = p.id "
+                + "WHERE m.idEjemplar = ? "
+                + "ORDER BY m.fechaHora ASC";
 
 		List<Mensaje> mensajes = new ArrayList<>();
 
 		try (PreparedStatement pstmt = con.prepareStatement(sqlString)) {
-			pstmt.setLong(1, ejemplar.getId());
+			pstmt.setLong(1, idejemplar);
 
 			try (ResultSet rs = pstmt.executeQuery()) {
 				while (rs.next()) {
 
 					Mensaje mensaje = new Mensaje();
 					mensaje.setId(rs.getLong("id"));
-					// mensaje.setFechahora(rs.getObject("fechahora", LocalDate.class));
+					mensaje.setFechahora(rs.getDate("fechaHora").toLocalDate());
 					mensaje.setMensaje(rs.getString("mensaje"));
 					mensaje.setIdEjemplar(rs.getLong("idEjemplar"));
 					mensaje.setIdPersona(rs.getLong("idPersona"));
 
-					Persona persona = new Persona();
-					persona.setNombre(rs.getString("nombre"));
-					persona.setEmail(rs.getString("email"));
-					// mensaje.setId(persona.getId());;
 
 					mensajes.add(mensaje);
 				}

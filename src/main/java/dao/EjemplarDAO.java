@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import modelo.Ejemplar;
@@ -88,7 +89,6 @@ public class EjemplarDAO {
 					Ejemplar ejemplar = new Ejemplar();
 					ejemplar.setId(rs.getLong("id"));
 					ejemplar.setNombre(rs.getString("nombre"));
-					ejemplar.setPlanta(p);
 
 					ejemplares.add(ejemplar);
 				}
@@ -99,7 +99,32 @@ public class EjemplarDAO {
 
 		return ejemplares;
 	}
+	
+	public List<Ejemplar> listadoEjemplares() {
 
+		String sqlString = "SELECT * FROM ejemplares ORDER BY nombre ASC";
+		ArrayList<Ejemplar> ejemplares = new ArrayList<Ejemplar>();
+
+		try {
+			PreparedStatement pStatement = con.prepareStatement(sqlString);
+			ResultSet rs = pStatement.executeQuery();
+
+			while (rs.next()) {
+				Ejemplar nuevo = new Ejemplar();
+				nuevo.setId(rs.getLong(1));
+				nuevo.setNombre(rs.getString(2));
+				
+				ejemplares.add(nuevo);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return ejemplares;
+	}
+
+	/*
 	public Set<Ejemplar> filtarEjemplaresPorPlanta(ArrayList<Planta> plantas) {
 		Set<Ejemplar> listaEjemplares = new HashSet<Ejemplar>();
 
@@ -111,6 +136,6 @@ public class EjemplarDAO {
 
 		return listaEjemplares;
 
-	}
+	}*/
 
 }

@@ -1,5 +1,7 @@
 package controlador;
 
+import java.util.List;
+
 import conexionBD.ConexionBDD;
 import dao.EjemplarDAO;
 import dao.MensajeDAO;
@@ -22,6 +24,10 @@ public class ServiciosMensaje {
 	
 	public int crearMensaje(Mensaje m) {
 		return mensajeDao.crearMensaje(m);
+	}
+	
+	public List<Mensaje> obtenerMensajesPorIdEjemplar (Long id){
+		return mensajeDao.obtenerMensajesDeEjemplar(id);
 	}
 
 }

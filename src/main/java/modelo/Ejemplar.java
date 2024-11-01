@@ -44,7 +44,7 @@ public class Ejemplar {
 
 	@Override
 	public String toString() {
-		return "Ejemplar [id=" + id + ", nombre=" + nombre + "]";
+		return "Ejemplar: " + nombre;
 	}
 	
 	

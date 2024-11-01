@@ -1,7 +1,9 @@
 package controlador;
 
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 import conexionBD.ConexionBDD;
 import dao.EjemplarDAO;
@@ -25,6 +27,13 @@ public class ServiciosEjemplar {
 		return ejemplarDao.crearEjemplar(p);
 	}
 	
+	public Set<Ejemplar> filtarEjemplaresPlanta(Planta p){
+		return ejemplarDao.obtenerEjemplaresPorPlanta(p);
+	}
+	
+	public List<Ejemplar> listadoEjemplares(){
+		return ejemplarDao.listadoEjemplares();
+	}
 	
 	
 

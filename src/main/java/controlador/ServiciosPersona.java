@@ -5,6 +5,7 @@ import java.util.Scanner;
 import conexionBD.ConexionBDD;
 import dao.CredencialesDAO;
 import dao.PersonaDAO;
+import modelo.Persona;
 
 public class ServiciosPersona {
 	
@@ -23,12 +24,15 @@ public class ServiciosPersona {
 	}
 	
 	public int crearUsuario(String nombre,String email,String usuario,String password) {	
-		return personaDao.insertarPersona(nombre, email, credencialesDao.crearCredenciales(usuario, password));
-		
+		return personaDao.insertarPersona(nombre, email, credencialesDao.crearCredenciales(usuario, password));	
 	}
 	
 	public Long obtenerIdPersonaPorUsuario(String usuario) {
 		return personaDao.obtenerIdporUsuario(usuario);
+	}
+	
+	public Persona obtenerPersonaPorId(Long id) {
+		return personaDao.obtenerPersonaPorId(id);
 	}
 
 }

@@ -1,6 +1,7 @@
 package vista;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -141,8 +142,9 @@ public class Fachada {
 						s.setUsuario(usuario);
 						s.setPerfil(Perfil.REGISTRADO);
 						if (usuario.equals("admin")) {
-							this.mostrarMenuAdministrador(s);
 							s.setPerfil(Perfil.ADMIN);
+							this.mostrarMenuAdministrador(s);
+							
 						} else {
 							this.mostrarMenuUsuarioRegistrado(s);
 						}
@@ -243,8 +245,8 @@ public class Fachada {
 		} while (sesionActiva);
 	}
 
-	public void mostrarMenuAdministrador (Sesion s) {
-		
+	public void mostrarMenuAdministrador(Sesion s) {
+
 		Scanner teclado = new Scanner(System.in);
 		int opcion = -1;
 		do {
@@ -261,7 +263,7 @@ public class Fachada {
 				case 1:
 					System.out.println("Introduce el nombre de la persona: ");
 					String nombre = teclado.nextLine();
-					
+
 					String email = "";
 					do {
 						System.out.println("Introduce el email de la persona: ");
@@ -275,9 +277,9 @@ public class Fachada {
 							System.out.println("El email ya existe");
 						}
 					} while (Comprobaciones.comprobarEspaciosBlanco(email) || personaServ.existeEmail(email));
-					
+
 					String usuario = "";
-					
+
 					do {
 						System.out.println("Introduce el usuario de la persona: ");
 						usuario = teclado.nextLine();
@@ -285,7 +287,7 @@ public class Fachada {
 						if (Comprobaciones.comprobarEspaciosBlanco(usuario)) {
 							System.out.println("El usuario no puede contener espacios en blanco");
 						}
-						
+
 						if (usuario.equalsIgnoreCase("admin")) {
 							System.out.println("Nombre de usuario reservado.");
 						}
@@ -293,8 +295,9 @@ public class Fachada {
 						if (credendialesServ.existeUsuario(usuario)) {
 							System.out.println("El usuario ya existe");
 						}
-					} while (Comprobaciones.comprobarEspaciosBlanco(usuario) || credendialesServ.existeUsuario(usuario) || usuario.equalsIgnoreCase("admin"));
-					
+					} while (Comprobaciones.comprobarEspaciosBlanco(usuario) || credendialesServ.existeUsuario(usuario)
+							|| usuario.equalsIgnoreCase("admin"));
+
 					String password = "";
 					do {
 						System.out.println("Introduce la contraseña de la persona: ");
@@ -305,13 +308,15 @@ public class Fachada {
 						}
 
 						if (!Comprobaciones.esContrasenaValida(password)) {
-							System.out.println("La contraseña no es válida. Recuerda que la contraseña tiene que tener una longitud de 6 carácteres minimo, incluyendo una letra y un número mínimo");
+							System.out.println(
+									"La contraseña no es válida. Recuerda que la contraseña tiene que tener una longitud de 6 carácteres minimo, incluyendo una letra y un número mínimo");
 						}
-					} while (!Comprobaciones.esContrasenaValida(password) || Comprobaciones.comprobarEspaciosBlanco(password));
-					
-					if (personaServ.crearUsuario(nombre, email, usuario, password)>0) {
+					} while (!Comprobaciones.esContrasenaValida(password)
+							|| Comprobaciones.comprobarEspaciosBlanco(password));
+
+					if (personaServ.crearUsuario(nombre, email, usuario, password) > 0) {
 						System.out.println("Usuario registrado correctamente");
-					}else {
+					} else {
 						System.out.println("No se ha podido registrar el usuario");
 					}
 					break;
@@ -339,11 +344,11 @@ public class Fachada {
 			}
 
 		} while (sesionActiva);
-		
+
 	}
-	
+
 	public void mostrarMenuGestionarPlantas() {
-		
+
 		Scanner teclado = new Scanner(System.in);
 		int opcion = -1;
 		do {
@@ -360,49 +365,50 @@ public class Fachada {
 				case 1:
 					String codigo = "";
 					do {
-						System.out.println("Introduce el codigo de la planta (Sin números, espacios, dierisis o carácteres especiales)");
+						System.out.println(
+								"Introduce el codigo de la planta (Sin números, espacios, dierisis o carácteres especiales)");
 						codigo = teclado.nextLine();
-						
+
 						if (!Comprobaciones.esCodigoValido(codigo)) {
-							System.out.println("Formato de codigo incorrecto. Recuerda que no puede contener números, espacios, dierisis o carácteres especiales");
+							System.out.println(
+									"Formato de codigo incorrecto. Recuerda que no puede contener números, espacios, dierisis o carácteres especiales");
 						}
-						
-						
+
 						if (plantaServ.existeCodigoPlanta(codigo)) {
 							System.out.println("Ya existe una planta con ese codigo");
 						}
-						
-					}while (!Comprobaciones.esCodigoValido(codigo) || plantaServ.existeCodigoPlanta(codigo));
-					
+
+					} while (!Comprobaciones.esCodigoValido(codigo) || plantaServ.existeCodigoPlanta(codigo));
+
 					String nombrecomun = "";
 					do {
 						System.out.println("Introduce el nombre común de la planta. ");
 						nombrecomun = teclado.nextLine();
-						
+
 						if (!Comprobaciones.nombreValido(nombrecomun)) {
 							System.out.println("Nombre comun incorrecto. No puede contener número o solo espacios");
 						}
-					}while (!Comprobaciones.nombreValido(nombrecomun));
-					
+					} while (!Comprobaciones.nombreValido(nombrecomun));
+
 					String nombrecientifico = "";
 					do {
 						System.out.println("Introduce el nombre científico de la planta");
 						nombrecientifico = teclado.nextLine();
-						
-						if (!Comprobaciones.nombreValido(nombrecientifico)) {
-							System.out.println("Nombre científico incorrecto. No puede contener número o solo espacios");
-						}
-					}while (!Comprobaciones.nombreValido(nombrecientifico));
 
-					
-					Planta nueva = new Planta (codigo.toUpperCase(), nombrecomun, nombrecientifico);
-					
-					if (plantaServ.añadirPlanta(nueva)>0) {
+						if (!Comprobaciones.nombreValido(nombrecientifico)) {
+							System.out
+									.println("Nombre científico incorrecto. No puede contener número o solo espacios");
+						}
+					} while (!Comprobaciones.nombreValido(nombrecientifico));
+
+					Planta nueva = new Planta(codigo.toUpperCase(), nombrecomun, nombrecientifico);
+
+					if (plantaServ.añadirPlanta(nueva) > 0) {
 						System.out.println("Planta añadida correctamente");
-					}else {
+					} else {
 						System.out.println("No se pudo añadir la planta");
-					}				
-					
+					}
+
 					break;
 				case 2:
 					System.out.println("Lista de plantas");
@@ -418,29 +424,32 @@ public class Fachada {
 							num = teclado.nextInt();
 							teclado.nextLine();
 							if (num < 1 || num > numFinal) {
-								System.out
-										.println("Numero incorrecto. Tienes que introducir un número entre el 1 y el " + numFinal);
+								System.out.println("Numero incorrecto. Tienes que introducir un número entre el 1 y el "
+										+ numFinal);
 							} else {
 								String actnombrecomun = "";
 								do {
 									System.out.println("Introduce el nuevo nombre común de la planta. ");
 									actnombrecomun = teclado.nextLine();
-									
+
 									if (!Comprobaciones.nombreValido(actnombrecomun)) {
-										System.out.println("Nombre comun incorrecto. No puede contener número o solo espacios");
+										System.out.println(
+												"Nombre comun incorrecto. No puede contener número o solo espacios");
 									}
-								}while (!Comprobaciones.nombreValido(actnombrecomun));
-								
+								} while (!Comprobaciones.nombreValido(actnombrecomun));
+
 								String nombrecien = "";
 								do {
 									System.out.println("Introduce el nuevo nombre científico de la planta");
 									nombrecien = teclado.nextLine();
-									
+
 									if (!Comprobaciones.nombreValido(nombrecien)) {
-										System.out.println("Nombre científico incorrecto. No puede contener número o solo espacios");
+										System.out.println(
+												"Nombre científico incorrecto. No puede contener número o solo espacios");
 									}
-								}while (!Comprobaciones.nombreValido(nombrecien));
-								if (plantaServ.actualizarPlanta(plantaServ.listaPlantas().get(num-1), actnombrecomun, nombrecien)>0) {
+								} while (!Comprobaciones.nombreValido(nombrecien));
+								if (plantaServ.actualizarPlanta(plantaServ.listaPlantas().get(num - 1), actnombrecomun,
+										nombrecien) > 0) {
 									System.out.println("Actualizado correctamente");
 								} else {
 									System.out.println("No se ha podido actualizar");
@@ -453,7 +462,7 @@ public class Fachada {
 
 					} while (num < 1 || num > numFinal);
 					break;
-				
+
 				case 0:
 					break;
 				}
@@ -463,10 +472,10 @@ public class Fachada {
 			}
 
 		} while (opcion != 0);
-		
+
 	}
-	
-	public void mostrarMenuGestionEjemplares (Sesion s) {
+
+	public void mostrarMenuGestionEjemplares(Sesion s) {
 		Scanner teclado = new Scanner(System.in);
 		int opcion = -1;
 		do {
@@ -494,37 +503,124 @@ public class Fachada {
 							num = teclado.nextInt();
 							teclado.nextLine();
 							if (num < 1 || num > numFinal) {
-								System.out
-										.println("Numero incorrecto. Tienes que introducir un número entre el 1 y el " + numFinal);
+								System.out.println("Numero incorrecto. Tienes que introducir un número entre el 1 y el "
+										+ numFinal);
 							} else {
 								Planta escogida = new Planta();
 								escogida.setCodigo(plantaServ.listaPlantas().get(num - 1).getCodigo());
-								escogida.setNombrecientifico(plantaServ.listaPlantas().get(num - 1).getNombrecientifico());
+								escogida.setNombrecientifico(
+										plantaServ.listaPlantas().get(num - 1).getNombrecientifico());
 								escogida.setNombrecomun(plantaServ.listaPlantas().get(num - 1).getNombrecomun());
-							    Ejemplar nuevoEjemplar = ejemplarServ.crearEjemplar(escogida);
-							    if (nuevoEjemplar==null) {
-							    	System.out.println("Error al crear el ejemplar");
-							    }else {
-							    	System.out.println("Introduce el mensaje que quieres añadir al ejemplar.");
-								    String mensaje = teclado.nextLine();
-								    Mensaje nuevo = new Mensaje (LocalDate.now(), mensaje, nuevoEjemplar.getId(), personaServ.obtenerIdPersonaPorUsuario(s.getUsuario()));
-								    if(mensajeServ.crearMensaje(nuevo)>0) {
-								    	System.out.println("Se ha creado el ejemplar con el mensaje correspondiente correctamente.");
-								    }
-							    }
-							  
+								Ejemplar nuevoEjemplar = ejemplarServ.crearEjemplar(escogida);
+								if (nuevoEjemplar == null) {
+									System.out.println("Error al crear el ejemplar");
+								} else {
+									System.out.println("Introduce el mensaje que quieres añadir al ejemplar.");
+									String mensaje = teclado.nextLine();
+									Mensaje nuevo = new Mensaje(LocalDate.now(), mensaje, nuevoEjemplar.getId(),
+											personaServ.obtenerIdPersonaPorUsuario(s.getUsuario()));
+									if (mensajeServ.crearMensaje(nuevo) > 0) {
+										System.out.println(
+												"Se ha creado el ejemplar con el mensaje correspondiente correctamente.");
+									}
+								}
+
 							}
 						} catch (InputMismatchException e) {
 							System.out.println("Error. Debes introducir un número");
 							teclado.nextLine(); // Limpiar el buffer del scanner
 						}
 
-					} while (num < 1 || num > numFinal);					
+					} while (num < 1 || num > numFinal);
 					break;
 				case 2:
-				
+					ArrayList<Integer> ejemplaresPlantas = new ArrayList<Integer>();
+					System.out.println("Lista de plantas");
+					for (int i = 0; i < plantaServ.listaPlantas().size(); i++) {
+						int numero = i + 1;
+						System.out.println(numero + "ª " + plantaServ.listaPlantas().get(i));
+					}
+					int numFinal1 = plantaServ.listaPlantas().size();
+					int num1 = 0;
+					do {
+						try {
+							System.out.println("Introduce el numero de la/s planta/as que quieres ver los ejemplares. Pulsa 0 cuando quieras salir: ");
+							num1 = teclado.nextInt();
+							teclado.nextLine();
+							if (num1 < 0 || num1 > numFinal1) {
+								System.out.println("Numero incorrecto. Tienes que introducir un número entre el 1 y el "
+										+ numFinal1 +" o el 0 para salir");
+							} else {
+								if (num1 == 0) {
+									break;
+								}
+								if (ejemplaresPlantas.contains(num1)) {
+									System.out.println("Ya introdujiste esa planta;");
+								}else {
+									ejemplaresPlantas.add(num1);
+								}
+							}
+							
+							
+						} catch (InputMismatchException e) {
+							System.out.println("Error. Debes introducir un número");
+							teclado.nextLine(); // Limpiar el buffer del scanner
+						}
+
+					} while (num1!=0);
+					for (Integer i : ejemplaresPlantas) {
+						if (ejemplarServ.filtarEjemplaresPlanta(plantaServ.listaPlantas().get(i-1)).size()==0) {
+							System.out.println("No hay ejemplares de la planta "+plantaServ.listaPlantas().get(i-1).getNombrecomun());
+						}else {
+							System.out.println("Ejemplares de la planta "+plantaServ.listaPlantas().get(i-1).getNombrecomun());
+							for (Ejemplar e: ejemplarServ.filtarEjemplaresPlanta(plantaServ.listaPlantas().get(i-1))) {
+								System.out.println(e.getNombre() + "\n Mensajes: ");
+								if (mensajeServ.obtenerMensajesPorIdEjemplar(e.getId()).size()==0) {
+									System.out.println("No hay mensajes");
+								}else {
+									for (Mensaje m: mensajeServ.obtenerMensajesPorIdEjemplar(e.getId())) {
+										System.out.println("-"+m.getMensaje()+ "\t Fecha: "+m.getFechahora());
+									}
+									System.out.println("");
+								}			
+							}
+							System.out.println("");
+						}
+						
+					}
 					break;
 				case 3:
+					System.out.println("Lista de ejemplares");
+					for (int i = 0; i < ejemplarServ.listadoEjemplares().size(); i++) {
+						int numero = i + 1;
+						System.out.println(numero + "ª " + ejemplarServ.listadoEjemplares().get(i));
+					}
+					int numFinalEjem = ejemplarServ.listadoEjemplares().size();
+					int numEjem = 0;
+					do {
+						try {
+							System.out.println("Introduce el numero del que quieres ver sus mensajes: ");
+							numEjem = teclado.nextInt();
+							teclado.nextLine();
+							if (numEjem < 1 || numEjem > numFinalEjem) {
+								System.out.println("Numero incorrecto. Tienes que introducir un número entre el 1 y el "
+										+ numFinalEjem);
+							} else {
+								if (mensajeServ.obtenerMensajesPorIdEjemplar(ejemplarServ.listadoEjemplares().get(numEjem-1).getId()).size()==0) {
+									System.out.println("No hay mensajes del ejemplar "+ejemplarServ.listadoEjemplares().get(numEjem-1).getNombre());
+								}else {
+									System.out.println("Mensajes del ejemplar "+ejemplarServ.listadoEjemplares().get(numEjem-1).getNombre()+"\n");
+									for (Mensaje m: mensajeServ.obtenerMensajesPorIdEjemplar(ejemplarServ.listadoEjemplares().get(numEjem-1).getId())){
+										System.out.println("-Mensaje: "+m.getMensaje()+"\t Fecha: "+m.getFechahora()+ "\tCreado por: "+ personaServ.obtenerPersonaPorId(m.getIdPersona()).getNombre()+" email: "+ personaServ.obtenerPersonaPorId(m.getIdPersona()).getEmail());
+									}
+								}
+							}
+						} catch (InputMismatchException e) {
+							System.out.println("Error. Debes introducir un número");
+							teclado.nextLine(); // Limpiar el buffer del scanner
+						}
+
+					} while (numEjem < 1 || numEjem > numFinalEjem);
 					break;
 				case 0:
 					break;

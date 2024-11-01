@@ -70,7 +70,7 @@ public class CredencialesDAO {
 	}
 
 	public boolean Login(String usuario, String contrasena) {
-		String sqlString = "SELECT password FROM CREDENCIALES WHERE usuario = ?";
+		String sqlString = "SELECT password FROM CREDENCIALES WHERE usuario = ? AND usuario <> 'admin'";
 		try {
 			PreparedStatement stmt = con.prepareStatement(sqlString);
 
