@@ -1,15 +1,15 @@
 package dao;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import modelo.Mensaje;
+import modelo.Planta;
 
 
 public class MensajeDAO {
@@ -27,7 +27,7 @@ public class MensajeDAO {
 
 		try (PreparedStatement statement = con.prepareStatement(query)) {
 
-			statement.setDate(1, java.sql.Date.valueOf(mensaje.getFechahora())); 
+			statement.setTimestamp(1, java.sql.Timestamp.valueOf(mensaje.getFechahora()));
 			statement.setString(2, mensaje.getMensaje()); 
 			statement.setLong(3, mensaje.getIdEjemplar()); 
 			statement.setLong(4, mensaje.getIdPersona()); 
@@ -60,7 +60,7 @@ public class MensajeDAO {
 
 					Mensaje mensaje = new Mensaje();
 					mensaje.setId(rs.getLong("id"));
-					mensaje.setFechahora(rs.getDate("fechaHora").toLocalDate());
+					mensaje.setFechahora(rs.getTimestamp("fechaHora").toLocalDateTime());
 					mensaje.setMensaje(rs.getString("mensaje"));
 					mensaje.setIdEjemplar(rs.getLong("idEjemplar"));
 					mensaje.setIdPersona(rs.getLong("idPersona"));
@@ -76,7 +76,7 @@ public class MensajeDAO {
 		return mensajes;
 	}
 
-	public List<Mensaje> obtenerMensajesPorRangoDeFecha(LocalDate fechaInicio, LocalDate fechaFin) {
+	public List<Mensaje> obtenerMensajesPorRangoDeFecha(LocalDateTime fechaInicio, LocalDateTime fechaFin) {
 		List<Mensaje> mensajes = new ArrayList<>();
 
 		String sql = "SELECT fechaHora, mensaje, idEjemplar, idPersona FROM mensajes "
@@ -84,14 +84,13 @@ public class MensajeDAO {
 
 		try (PreparedStatement stmt = con.prepareStatement(sql)) {
 			// Configura los parámetros del rango de fechas
-			stmt.setDate(1, Date.valueOf(fechaInicio));
-			stmt.setDate(2, Date.valueOf(fechaFin));
+			stmt.setTimestamp(1, java.sql.Timestamp.valueOf(fechaInicio));
+			stmt.setTimestamp(2, java.sql.Timestamp.valueOf(fechaFin));
 
 			try (ResultSet rs = stmt.executeQuery()) {
 				while (rs.next()) {
 					Mensaje mensaje = new Mensaje();
-					mensaje.setId(rs.getLong("id"));
-					mensaje.setFechahora(rs.getDate("fechaHora").toLocalDate());
+					mensaje.setFechahora(rs.getTimestamp("fechaHora").toLocalDateTime());
 					mensaje.setMensaje(rs.getString("mensaje"));
 					mensaje.setIdEjemplar(rs.getLong("idEjemplar"));
 					mensaje.setIdPersona(rs.getLong("idPersona"));
@@ -121,7 +120,7 @@ public class MensajeDAO {
 				while (rs.next()) {
 					Mensaje mensaje = new Mensaje();
 					mensaje.setId(rs.getLong("id"));
-					mensaje.setFechahora(rs.getDate("fechaHora").toLocalDate());
+					mensaje.setFechahora(rs.getTimestamp("fechaHora").toLocalDateTime());
 					mensaje.setMensaje(rs.getString("mensaje"));
 					mensaje.setIdEjemplar(rs.getLong("idEjemplar"));
 					mensaje.setIdPersona(rs.getLong("idPersona"));
@@ -136,21 +135,21 @@ public class MensajeDAO {
 		return mensajes;
 	}
 	
-	public List<Mensaje> obtenerMensajesPorPlanta(String nombrePlanta) {
+	public List<Mensaje> obtenerMensajesPorPlanta(Planta p) {
 		List<Mensaje> mensajes = new ArrayList<>();
 
 		String sql = "SELECT m.id, m.fechaHora, m.mensaje, m.idEjemplar, m.idPersona " + 
 		"FROM mensajes m, ejemplares e, plantas p "+ 
-		"WHERE m.idEjemplar = e.id and e.idplanta = p.codigo and p.nombrecomun like ?";
+		"WHERE m.idEjemplar = e.id and e.idplanta = p.codigo and p.codigo = ?";
 
 		try (PreparedStatement stmt = con.prepareStatement(sql)) {
-			stmt.setString(1, nombrePlanta);
+			stmt.setString(1, p.getCodigo());
 
 			try (ResultSet rs = stmt.executeQuery()) {
 				while (rs.next()) {
 					Mensaje mensaje = new Mensaje();
 					mensaje.setId(rs.getLong("id"));
-					mensaje.setFechahora(rs.getDate("fechaHora").toLocalDate());
+					mensaje.setFechahora(rs.getTimestamp("fechaHora").toLocalDateTime());
 					mensaje.setMensaje(rs.getString("mensaje"));
 					mensaje.setIdEjemplar(rs.getLong("idEjemplar"));
 					mensaje.setIdPersona(rs.getLong("idPersona"));

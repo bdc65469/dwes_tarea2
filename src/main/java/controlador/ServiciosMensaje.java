@@ -1,10 +1,12 @@
 package controlador;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import conexionBD.ConexionBDD;
 import dao.MensajeDAO;
 import modelo.Mensaje;
+import modelo.Planta;
 
 public class ServiciosMensaje {
 	
@@ -28,8 +30,12 @@ public class ServiciosMensaje {
 		return mensajeDao.obtenerMensajesPorPersona(id);
 	}
 	
-	public List<Mensaje> obtenerMensajesPorPlanta (String nombrePlanta){
-		return mensajeDao.obtenerMensajesPorPlanta(nombrePlanta);
+	public List<Mensaje> obtenerMensajesPorPlanta (Planta p){
+		return mensajeDao.obtenerMensajesPorPlanta(p);
+	}
+	
+	public List<Mensaje> obtenerMensajesPorFecha (LocalDateTime inicial, LocalDateTime fin){
+		return mensajeDao.obtenerMensajesPorRangoDeFecha(inicial, fin);
 	}
 
 }

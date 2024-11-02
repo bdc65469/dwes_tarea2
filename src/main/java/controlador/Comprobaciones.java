@@ -1,5 +1,8 @@
 package controlador;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Comprobaciones {
 
 	/**
@@ -67,6 +70,12 @@ public class Comprobaciones {
 
 		// Retorna true si cumple con ambas condiciones; de lo contrario, false
 		return false;
+	}
+	
+	public static String formatoFecha(LocalDateTime l) {
+		  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy HH:mm:ss");        
+	      String fechaHoraFormateada = l.format(formatter);
+	      return fechaHoraFormateada;
 	}
 
 }

@@ -1,8 +1,12 @@
 package vista;
 
-import java.time.LocalDate;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 import controlador.Comprobaciones;
@@ -143,7 +147,7 @@ public class Fachada {
 						if (usuario.equals("admin")) {
 							s.setPerfil(Perfil.ADMIN);
 							this.mostrarMenuAdministrador(s);
-							
+
 						} else {
 							this.mostrarMenuUsuarioRegistrado(s);
 						}
@@ -475,7 +479,7 @@ public class Fachada {
 								} else {
 									System.out.println("Introduce el mensaje que quieres añadir al ejemplar.");
 									String mensaje = teclado.nextLine();
-									Mensaje nuevo = new Mensaje(LocalDate.now(), mensaje, nuevoEjemplar.getId(),
+									Mensaje nuevo = new Mensaje(LocalDateTime.now(), mensaje, nuevoEjemplar.getId(),
 											personaServ.obtenerIdPersonaPorUsuario(s.getUsuario()));
 									if (mensajeServ.crearMensaje(nuevo) > 0) {
 										System.out.println(
@@ -502,49 +506,52 @@ public class Fachada {
 					int num1 = 0;
 					do {
 						try {
-							System.out.println("Introduce el numero de la/s planta/as que quieres ver los ejemplares. Pulsa 0 cuando quieras salir: ");
+							System.out.println(
+									"Introduce el numero de la/s planta/as que quieres ver los ejemplares. Pulsa 0 cuando quieras salir: ");
 							num1 = teclado.nextInt();
 							teclado.nextLine();
 							if (num1 < 0 || num1 > numFinal1) {
 								System.out.println("Numero incorrecto. Tienes que introducir un número entre el 1 y el "
-										+ numFinal1 +" o el 0 para salir");
+										+ numFinal1 + " o el 0 para salir");
 							} else {
 								if (num1 == 0) {
 									break;
 								}
 								if (ejemplaresPlantas.contains(num1)) {
 									System.out.println("Ya introdujiste esa planta;");
-								}else {
+								} else {
 									ejemplaresPlantas.add(num1);
 								}
 							}
-							
-							
+
 						} catch (InputMismatchException e) {
 							System.out.println("Error. Debes introducir un número");
 							teclado.nextLine(); // Limpiar el buffer del scanner
 						}
 
-					} while (num1!=0);
+					} while (num1 != 0);
 					for (Integer i : ejemplaresPlantas) {
-						if (ejemplarServ.filtarEjemplaresPlanta(plantaServ.listaPlantas().get(i-1)).size()==0) {
-							System.out.println("No hay ejemplares de la planta "+plantaServ.listaPlantas().get(i-1).getNombrecomun());
-						}else {
-							System.out.println("Ejemplares de la planta "+plantaServ.listaPlantas().get(i-1).getNombrecomun());
-							for (Ejemplar e: ejemplarServ.filtarEjemplaresPlanta(plantaServ.listaPlantas().get(i-1))) {
+						if (ejemplarServ.filtarEjemplaresPlanta(plantaServ.listaPlantas().get(i - 1)).size() == 0) {
+							System.out.println("No hay ejemplares de la planta "
+									+ plantaServ.listaPlantas().get(i - 1).getNombrecomun());
+						} else {
+							System.out.println(
+									"Ejemplares de la planta " + plantaServ.listaPlantas().get(i - 1).getNombrecomun());
+							for (Ejemplar e : ejemplarServ
+									.filtarEjemplaresPlanta(plantaServ.listaPlantas().get(i - 1))) {
 								System.out.println(e.getNombre() + "\n Mensajes: ");
-								if (mensajeServ.obtenerMensajesPorIdEjemplar(e.getId()).size()==0) {
+								if (mensajeServ.obtenerMensajesPorIdEjemplar(e.getId()).size() == 0) {
 									System.out.println("No hay mensajes");
-								}else {
-									for (Mensaje m: mensajeServ.obtenerMensajesPorIdEjemplar(e.getId())) {
-										System.out.println("-"+m.getMensaje()+ "\t Fecha: "+m.getFechahora());
+								} else {
+									for (Mensaje m : mensajeServ.obtenerMensajesPorIdEjemplar(e.getId())) {
+										System.out.println("-" + m.getMensaje() + "\t Fecha: " + Comprobaciones.formatoFecha(m.getFechahora()));
 									}
 									System.out.println("");
-								}			
+								}
 							}
 							System.out.println("");
 						}
-						
+
 					}
 					break;
 				case 3:
@@ -564,12 +571,22 @@ public class Fachada {
 								System.out.println("Numero incorrecto. Tienes que introducir un número entre el 1 y el "
 										+ numFinalEjem);
 							} else {
-								if (mensajeServ.obtenerMensajesPorIdEjemplar(ejemplarServ.listadoEjemplares().get(numEjem-1).getId()).size()==0) {
-									System.out.println("No hay mensajes del ejemplar "+ejemplarServ.listadoEjemplares().get(numEjem-1).getNombre());
-								}else {
-									System.out.println("Mensajes del ejemplar "+ejemplarServ.listadoEjemplares().get(numEjem-1).getNombre()+"\n");
-									for (Mensaje m: mensajeServ.obtenerMensajesPorIdEjemplar(ejemplarServ.listadoEjemplares().get(numEjem-1).getId())){
-										System.out.println("-Mensaje: "+m.getMensaje()+"\t Fecha: "+m.getFechahora()+ "\tCreado por: "+ personaServ.obtenerPersonaPorId(m.getIdPersona()).getNombre()+" email: "+ personaServ.obtenerPersonaPorId(m.getIdPersona()).getEmail());
+								if (mensajeServ
+										.obtenerMensajesPorIdEjemplar(
+												ejemplarServ.listadoEjemplares().get(numEjem - 1).getId())
+										.size() == 0) {
+									System.out.println("No hay mensajes del ejemplar "
+											+ ejemplarServ.listadoEjemplares().get(numEjem - 1).getNombre());
+								} else {
+									System.out.println("Mensajes del ejemplar "
+											+ ejemplarServ.listadoEjemplares().get(numEjem - 1).getNombre() + "\n");
+									for (Mensaje m : mensajeServ.obtenerMensajesPorIdEjemplar(
+											ejemplarServ.listadoEjemplares().get(numEjem - 1).getId())) {
+										System.out.println("-Mensaje: " + m.getMensaje() + "\t Fecha: "
+												+ Comprobaciones.formatoFecha(m.getFechahora()) + "\tCreado por: "
+												+ personaServ.obtenerPersonaPorId(m.getIdPersona()).getNombre()
+												+ " email: "
+												+ personaServ.obtenerPersonaPorId(m.getIdPersona()).getEmail());
 									}
 								}
 							}
@@ -590,7 +607,7 @@ public class Fachada {
 
 		} while (opcion != 0);
 	}
-	
+
 	public void mostrarMenuGestionarMensajes(Sesion s) {
 
 		Scanner teclado = new Scanner(System.in);
@@ -607,82 +624,179 @@ public class Fachada {
 
 				switch (opcion) {
 				case 1:
-						System.out.println("Lista de ejemplares");
-						for (int i = 0; i < ejemplarServ.listadoEjemplares().size(); i++) {
-							int numero = i + 1;
-							System.out.println(numero + "ª " + ejemplarServ.listadoEjemplares().get(i));
-						}
-						int numFinal = ejemplarServ.listadoEjemplares().size();
-						int num = 0;
-						do {
-							try {
-								Mensaje nuevo = null;
-								System.out.println("Introduce el numero del ejemplar que quieres añadirle un mensaje: ");
-								num = teclado.nextInt();
-								teclado.nextLine();
-								if (num < 1 || num > numFinal) {
-									System.out.println("Numero incorrecto. Tienes que introducir un número entre el 1 y el "
-											+ numFinal);
-								} else {
-									String mensaje = "";
-									do {
-										System.out.println("Introduce el mensaje que quieres añadir: ");
-										mensaje = teclado.nextLine();
-										
-										if (mensaje.length()==0) {
-											System.out.println("No puedes añadir un mensaje vacio.");
-										}else{
-											nuevo = new Mensaje (LocalDate.now(), mensaje, ejemplarServ.listadoEjemplares().get(num-1).getId(), personaServ.obtenerIdPersonaPorUsuario(s.getUsuario()));
-										}
-										
-										if (mensajeServ.crearMensaje(nuevo)>0) {
-											System.out.println("Mensaje añadido correctamente.");
-										}else {
-											System.out.println("No se ha podido añadir el mensaje.");
-										}
-										
-									}while (mensaje.length()==0);
-									
-								}
-							} catch (InputMismatchException e) {
-								System.out.println("Error. Debes introducir un número");
-								teclado.nextLine(); // Limpiar el buffer del scanner
-							}
+					System.out.println("Lista de ejemplares");
+					for (int i = 0; i < ejemplarServ.listadoEjemplares().size(); i++) {
+						int numero = i + 1;
+						System.out.println(numero + "ª " + ejemplarServ.listadoEjemplares().get(i));
+					}
+					int numFinal = ejemplarServ.listadoEjemplares().size();
+					int num = 0;
+					do {
+						try {
+							Mensaje nuevo = null;
+							System.out.println("Introduce el numero del ejemplar que quieres añadirle un mensaje: ");
+							num = teclado.nextInt();
+							teclado.nextLine();
+							if (num < 1 || num > numFinal) {
+								System.out.println("Numero incorrecto. Tienes que introducir un número entre el 1 y el "
+										+ numFinal);
+							} else {
+								String mensaje = "";
+								do {
+									System.out.println("Introduce el mensaje que quieres añadir: ");
+									mensaje = teclado.nextLine();
 
-						} while (num < 1 || num > numFinal);
-					
+									if (mensaje.length() == 0) {
+										System.out.println("No puedes añadir un mensaje vacio.");
+									} else {
+										nuevo = new Mensaje(LocalDateTime.now(), mensaje,
+												ejemplarServ.listadoEjemplares().get(num - 1).getId(),
+												personaServ.obtenerIdPersonaPorUsuario(s.getUsuario()));
+									}
+
+									if (mensajeServ.crearMensaje(nuevo) > 0) {
+										System.out.println("Mensaje añadido correctamente.");
+									} else {
+										System.out.println("No se ha podido añadir el mensaje.");
+									}
+
+								} while (mensaje.length() == 0);
+
+							}
+						} catch (InputMismatchException e) {
+							System.out.println("Error. Debes introducir un número");
+							teclado.nextLine(); // Limpiar el buffer del scanner
+						}
+
+					} while (num < 1 || num > numFinal);
+
 					break;
 				case 2:
 					String usuario = "";
 					do {
 						System.out.println("Introduce el usuario que quieres ver sus mensajes: ");
 						usuario = teclado.nextLine();
-						if (usuario.length()==0) {
+						if (usuario.length() == 0) {
 							System.out.println("Por favor introduce un usuario.");
-						}else {
+						} else {
 							if (!credendialesServ.existeUsuario(usuario)) {
 								System.out.println("No existe ese usuario");
-							}else {								
-								if (mensajeServ.obtenerMensajesPorPersona(personaServ.obtenerIdPersonaPorUsuario(usuario)).isEmpty()) {
-									System.out.println("El usuario "+usuario+" no ha escrito ningun mensaje");
-								}else {
-									System.out.println("Mensajes del usuario "+usuario+" :");
-									for (Mensaje m: mensajeServ.obtenerMensajesPorPersona(personaServ.obtenerIdPersonaPorUsuario(usuario))) {
-										System.out.println("-Mensaje: "+m.getMensaje()+"\t Fecha: "+m.getFechahora()+"\t Ejemplar:"+ ejemplarServ.obtenerEjemplarporId(m.getIdEjemplar()).getNombre());
+							} else {
+								if (mensajeServ
+										.obtenerMensajesPorPersona(personaServ.obtenerIdPersonaPorUsuario(usuario))
+										.isEmpty()) {
+									System.out.println("El usuario " + usuario + " no ha escrito ningun mensaje");
+								} else {
+									System.out.println("Mensajes del usuario " + usuario + " :");
+									for (Mensaje m : mensajeServ.obtenerMensajesPorPersona(
+											personaServ.obtenerIdPersonaPorUsuario(usuario))) {
+										System.out.println("-Mensaje: " + m.getMensaje() + "\t Fecha: "
+												+ Comprobaciones.formatoFecha(m.getFechahora()) + "\t Ejemplar:"
+												+ ejemplarServ.obtenerEjemplarporId(m.getIdEjemplar()).getNombre() + "\tCreado por: "
+												+ personaServ.obtenerPersonaPorId(m.getIdPersona()).getNombre());
 									}
 								}
 							}
 						}
-						
-					}while (!credendialesServ.existeUsuario(usuario) || usuario.length()==0);
-					
+
+					} while (!credendialesServ.existeUsuario(usuario) || usuario.length() == 0);
+
 					break;
 				case 3:
+					LocalDateTime fechaInicial = null;
+			        LocalDateTime fechaFinal = null;
+			        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy HH:mm:ss");			 
+			        LocalDateTime fechaHoraActual = LocalDateTime.now();
+					do {
+			            try {
+			                System.out.print("Introduce la fecha inicial (dd/MM/yy HH:mm:ss): ");
+			                String inputInicial = teclado.nextLine();
+			                fechaInicial = LocalDateTime.parse(inputInicial, formatter);
+			                
+			                System.out.print("Introduce la fecha final (dd/MM/yy HH:mm:ss): ");
+			                String inputFinal = teclado.nextLine();
+			                fechaFinal = LocalDateTime.parse(inputFinal, formatter);
+			                
+			                // Verificar que ambas fechas sean anteriores o iguales a la fecha actual
+			                if (fechaInicial.isAfter(fechaHoraActual)) {
+			                    System.out.println("La fecha inicial no puede ser posterior a la fecha y hora actual.");
+			                    continue;
+			                }
+			                
+			                if (fechaFinal.isAfter(fechaHoraActual)) {
+			                    System.out.println("La fecha final no puede ser posterior a la fecha y hora actual.");
+			                    continue; 
+			                }
+			                
+			                // Verificar que la fecha inicial sea menor que la fecha final
+			                if (fechaInicial.isAfter(fechaFinal)) {
+			                    System.out.println("La fecha inicial debe ser anterior a la fecha final.");
+			                    continue; 
+			                }
+			                
+			                // Si todas las condiciones se cumplen, salir del bucle
+			                break;
+
+			            } catch (DateTimeParseException e) {
+			                System.out.println("Formato incorrecto. Asegúrate de usar el formato dd/MM/yy HH:mm:ss.");
+			            }
+			            
+
+			        } while (true);
 					
+					List<Mensaje> listaMensajesFecha = mensajeServ.obtenerMensajesPorFecha(fechaInicial, fechaFinal);
+		            if (listaMensajesFecha.isEmpty()) {
+		            	System.out.println("No hay mensajes entre el "+Comprobaciones.formatoFecha(fechaInicial)+" y el "+Comprobaciones.formatoFecha(fechaFinal));
+		            }else {
+		            	for (Mensaje m: listaMensajesFecha) {
+		            		System.out.println("-Mensaje: " + m.getMensaje() + "\t Fecha: "
+									+ Comprobaciones.formatoFecha(m.getFechahora()) + "\t Ejemplar:"
+									+ ejemplarServ.obtenerEjemplarporId(m.getIdEjemplar()).getNombre() + "\tCreado por: "
+								    + personaServ.obtenerPersonaPorId(m.getIdPersona()).getNombre());
+		            	}
+		            }
+
 					break;
 				case 4:
-					
+					System.out.println("Lista de plantas");
+					for (int i = 0; i < plantaServ.listaPlantas().size(); i++) {
+						int numero = i + 1;
+						System.out.println(numero + "ª " + plantaServ.listaPlantas().get(i));
+					}
+					int numPlanta = plantaServ.listaPlantas().size();
+					int numP = 0;
+					do {
+						try {
+							System.out.println("Introduce el numero de la planta que quieres ver sus mensajes: ");
+							numP = teclado.nextInt();
+							teclado.nextLine();
+							if (numP < 1 || numP > numPlanta) {
+								System.out.println("Numero incorrecto. Tienes que introducir un número entre el 1 y el "
+										+ numPlanta);
+							} else {
+								List<Mensaje> listaMensajes = mensajeServ
+										.obtenerMensajesPorPlanta(plantaServ.listaPlantas().get(numP - 1));
+								if (listaMensajes.isEmpty()) {
+									System.out.println("Esta planta no tiene mensajes");
+								} else {
+									System.out.println("Mensajes de la planta "+plantaServ.listaPlantas().get(numP - 1).getNombrecomun()+": " );
+									for (Mensaje m : listaMensajes) {
+										System.out.println("-Mensaje: " + m.getMensaje() + "\t Fecha: "
+												+ Comprobaciones.formatoFecha(m.getFechahora())+ "\t Ejemplar:"
+												+ ejemplarServ.obtenerEjemplarporId(m.getIdEjemplar()).getNombre() + "\tCreado por: "
+												+ personaServ.obtenerPersonaPorId(m.getIdPersona()).getNombre());
+									}
+								}
+							}
+
+						} catch (InputMismatchException e) {
+							System.out.println("Error. Debes introducir un número");
+							teclado.nextLine(); // Limpiar el buffer del scanner
+						}
+
+					} while (numP < 1 || numP > numPlanta);
 					break;
+
 				case 0:
 					break;
 				}
