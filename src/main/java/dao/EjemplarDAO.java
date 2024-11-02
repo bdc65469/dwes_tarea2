@@ -81,7 +81,7 @@ public class EjemplarDAO {
 		Set<Ejemplar> ejemplares = new HashSet<>();
 
 		try (PreparedStatement pstmt = con.prepareStatement(sqlString)) {
-			pstmt.setString(1, p.getCodigo()); //
+			pstmt.setString(1, p.getCodigo()); 
 
 			try (ResultSet rs = pstmt.executeQuery()) {
 				while (rs.next()) {
@@ -124,18 +124,24 @@ public class EjemplarDAO {
 		return ejemplares;
 	}
 
-	/*
-	public Set<Ejemplar> filtarEjemplaresPorPlanta(ArrayList<Planta> plantas) {
-		Set<Ejemplar> listaEjemplares = new HashSet<Ejemplar>();
+	public Ejemplar obtenerEjemplarPorId(Long id) {
+		String sqlString = "SELECT nombre FROM ejemplares WHERE id = ?";
+		Ejemplar ejemplar = null;
 
-		for (Planta p : plantas) {
-			for (Ejemplar e : this.obtenerEjemplaresPorPlanta(p)) {
-				listaEjemplares.add(e);
+		try (PreparedStatement pstmt = con.prepareStatement(sqlString)) {
+			pstmt.setLong(1, id);
+
+			try (ResultSet rs = pstmt.executeQuery()) {
+				if (rs.next()) {
+					ejemplar = new Ejemplar();
+					ejemplar.setId(id);
+					ejemplar.setNombre(rs.getString("nombre"));					
+				}
 			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
-
-		return listaEjemplares;
-
-	}*/
+		return ejemplar;
+	}
 
 }

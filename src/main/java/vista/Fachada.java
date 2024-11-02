@@ -78,8 +78,8 @@ public class Fachada {
 		System.out.println("***********************************************");
 		System.out.println("Menú Gestión de Ejemplares");
 		System.out.println("1.  Crear ejemplar de una planta.");
-		System.out.println("2.  Ver ejemplares de planta/as .");
-		System.out.println("3.  Ver mensajes de un ejemplar .");
+		System.out.println("2.  Ver ejemplares de planta/as.");
+		System.out.println("3.  Ver mensajes de un ejemplar.");
 		System.out.println("0.  Salir.");
 		System.out.println("Seleccione una opcion:");
 	}
@@ -92,8 +92,7 @@ public class Fachada {
 		System.out.println("2.  Filtrar mensajes por persona.");
 		System.out.println("3.  Filtrar mensajes por un rango de fechas.");
 		System.out.println("4.  Filtrar mensajes por planta.");
-		System.out.println("5.  Salir del menú de gestión de mensajes.");
-		System.out.println("0.  Cerrar aplicación.");
+		System.out.println("0.  Salir.");
 		System.out.println("Seleccione una opcion:");
 	}
 
@@ -202,47 +201,6 @@ public class Fachada {
 
 		} while (sesionActiva);
 
-	}
-
-	public void mostrarMenuGestionarMensajes(Sesion s) {
-		Scanner teclado = new Scanner(System.in);
-		int opcion = -1;
-		do {
-			this.menuGestionarMensajes();
-			try {
-				opcion = teclado.nextInt();
-				teclado.nextLine();
-				if (opcion < 0 || opcion > 5) {
-					System.out.println("Opción fuera de rango. Inténtelo de nuevo.");
-					continue;
-				}
-
-				switch (opcion) {
-				case 1:
-
-					break;
-				case 2:
-
-					break;
-				case 3:
-
-					break;
-				case 4:
-
-					break;
-				case 5:
-					this.mostrarMenuUsuarioRegistrado(s);
-					break;
-				case 0:
-					sesionActiva = false;
-					break;
-				}
-			} catch (InputMismatchException e) {
-				System.out.println("Entrada inválida. Por favor, ingrese un número entero.");
-				teclado.next();
-			}
-
-		} while (sesionActiva);
 	}
 
 	public void mostrarMenuAdministrador(Sesion s) {
@@ -631,5 +589,109 @@ public class Fachada {
 			}
 
 		} while (opcion != 0);
+	}
+	
+	public void mostrarMenuGestionarMensajes(Sesion s) {
+
+		Scanner teclado = new Scanner(System.in);
+		int opcion = -1;
+		do {
+			this.menuGestionarMensajes();
+			try {
+				opcion = teclado.nextInt();
+				teclado.nextLine();
+				if (opcion < 0 || opcion > 4) {
+					System.out.println("Opción fuera de rango. Inténtelo de nuevo.");
+					continue;
+				}
+
+				switch (opcion) {
+				case 1:
+						System.out.println("Lista de ejemplares");
+						for (int i = 0; i < ejemplarServ.listadoEjemplares().size(); i++) {
+							int numero = i + 1;
+							System.out.println(numero + "ª " + ejemplarServ.listadoEjemplares().get(i));
+						}
+						int numFinal = ejemplarServ.listadoEjemplares().size();
+						int num = 0;
+						do {
+							try {
+								Mensaje nuevo = null;
+								System.out.println("Introduce el numero del ejemplar que quieres añadirle un mensaje: ");
+								num = teclado.nextInt();
+								teclado.nextLine();
+								if (num < 1 || num > numFinal) {
+									System.out.println("Numero incorrecto. Tienes que introducir un número entre el 1 y el "
+											+ numFinal);
+								} else {
+									String mensaje = "";
+									do {
+										System.out.println("Introduce el mensaje que quieres añadir: ");
+										mensaje = teclado.nextLine();
+										
+										if (mensaje.length()==0) {
+											System.out.println("No puedes añadir un mensaje vacio.");
+										}else{
+											nuevo = new Mensaje (LocalDate.now(), mensaje, ejemplarServ.listadoEjemplares().get(num-1).getId(), personaServ.obtenerIdPersonaPorUsuario(s.getUsuario()));
+										}
+										
+										if (mensajeServ.crearMensaje(nuevo)>0) {
+											System.out.println("Mensaje añadido correctamente.");
+										}else {
+											System.out.println("No se ha podido añadir el mensaje.");
+										}
+										
+									}while (mensaje.length()==0);
+									
+								}
+							} catch (InputMismatchException e) {
+								System.out.println("Error. Debes introducir un número");
+								teclado.nextLine(); // Limpiar el buffer del scanner
+							}
+
+						} while (num < 1 || num > numFinal);
+					
+					break;
+				case 2:
+					String usuario = "";
+					do {
+						System.out.println("Introduce el usuario que quieres ver sus mensajes: ");
+						usuario = teclado.nextLine();
+						if (usuario.length()==0) {
+							System.out.println("Por favor introduce un usuario.");
+						}else {
+							if (!credendialesServ.existeUsuario(usuario)) {
+								System.out.println("No existe ese usuario");
+							}else {								
+								if (mensajeServ.obtenerMensajesPorPersona(personaServ.obtenerIdPersonaPorUsuario(usuario)).isEmpty()) {
+									System.out.println("El usuario "+usuario+" no ha escrito ningun mensaje");
+								}else {
+									System.out.println("Mensajes del usuario "+usuario+" :");
+									for (Mensaje m: mensajeServ.obtenerMensajesPorPersona(personaServ.obtenerIdPersonaPorUsuario(usuario))) {
+										System.out.println("-Mensaje: "+m.getMensaje()+"\t Fecha: "+m.getFechahora()+"\t Ejemplar:"+ ejemplarServ.obtenerEjemplarporId(m.getIdEjemplar()).getNombre());
+									}
+								}
+							}
+						}
+						
+					}while (!credendialesServ.existeUsuario(usuario) || usuario.length()==0);
+					
+					break;
+				case 3:
+					
+					break;
+				case 4:
+					
+					break;
+				case 0:
+					break;
+				}
+			} catch (InputMismatchException e) {
+				System.out.println("Entrada inválida. Por favor, ingrese un número entero.");
+				teclado.next();
+			}
+
+		} while (opcion != 0);
+
 	}
 }

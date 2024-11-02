@@ -3,22 +3,16 @@ package controlador;
 import java.util.List;
 
 import conexionBD.ConexionBDD;
-import dao.EjemplarDAO;
 import dao.MensajeDAO;
-import dao.PersonaDAO;
 import modelo.Mensaje;
 
 public class ServiciosMensaje {
 	
 	private ConexionBDD factoria;
-	private PersonaDAO personaDao;
-	private EjemplarDAO ejemplarDao;
 	private MensajeDAO mensajeDao;
 	
 	public ServiciosMensaje() {
 		factoria = ConexionBDD.getCon();
-		personaDao = factoria.getPersonaDAO();
-		ejemplarDao = factoria.getEjemplarDAO();
 		mensajeDao = factoria.getMensajeDAO();	
 	}
 	
@@ -28,6 +22,14 @@ public class ServiciosMensaje {
 	
 	public List<Mensaje> obtenerMensajesPorIdEjemplar (Long id){
 		return mensajeDao.obtenerMensajesDeEjemplar(id);
+	}
+	
+	public List<Mensaje> obtenerMensajesPorPersona (Long id){
+		return mensajeDao.obtenerMensajesPorPersona(id);
+	}
+	
+	public List<Mensaje> obtenerMensajesPorPlanta (String nombrePlanta){
+		return mensajeDao.obtenerMensajesPorPlanta(nombrePlanta);
 	}
 
 }

@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import modelo.Credenciales;
 
 public class CredencialesDAO {
 
@@ -81,8 +80,10 @@ public class CredencialesDAO {
 				String pass = rs.getString("password");
 				return pass.equals(contrasena); // Compara la contraseña ingresada con la almacenada
 			}
+		}catch (NullPointerException n){
+			System.out.println("Base de datos no encontrada. Recuerda arrancar el xamp");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			e.getLocalizedMessage();
 		}
 		return false; // Retorna false si el usuario no existe o si ocurre algún error
 	}

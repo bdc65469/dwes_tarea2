@@ -1,6 +1,5 @@
 package controlador;
 
-import java.util.Scanner;
 
 import conexionBD.ConexionBDD;
 import dao.CredencialesDAO;

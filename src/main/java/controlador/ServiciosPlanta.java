@@ -12,7 +12,7 @@ public class ServiciosPlanta {
 	private PlantaDAO plantaDao;
 	
 	public ServiciosPlanta() {
-		factoria = factoria.getCon();
+		factoria = ConexionBDD.getCon();
 		plantaDao = factoria.getPlantaDAO();
 	}
 	

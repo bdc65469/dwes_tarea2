@@ -19,8 +19,9 @@ public class PersonaDAO {
 	public Long obtenerIdporUsuario(String usuario) {
 		Long idPersona = null;
 
-		String query = "SELECT p.id FROM personas p " + "JOIN credenciales c ON p.idCredenciales = c.id "
-				+ "WHERE c.usuario = ?";
+		String query = "SELECT p.id FROM personas p " + 
+		"JOIN credenciales c ON p.idCredenciales = c.id "+ 
+		"WHERE c.usuario = ?";
 
 		try (PreparedStatement statement = con.prepareStatement(query)) {
 

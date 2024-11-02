@@ -1,6 +1,5 @@
 package vista;
 
-import controlador.Comprobaciones;
 
 public class Main {
 

@@ -1,25 +1,21 @@
 package controlador;
 
-import java.util.InputMismatchException;
 import java.util.List;
-import java.util.Scanner;
 import java.util.Set;
 
 import conexionBD.ConexionBDD;
 import dao.EjemplarDAO;
-import dao.PlantaDAO;
 import modelo.Ejemplar;
 import modelo.Planta;
 
 public class ServiciosEjemplar {
 	
 	private ConexionBDD factoria;
-	private PlantaDAO plantaDao;
+
 	private EjemplarDAO ejemplarDao;
 	
 	public ServiciosEjemplar() {
 		factoria = ConexionBDD.getCon();
-		plantaDao = factoria.getPlantaDAO();
 		ejemplarDao = factoria.getEjemplarDAO();
 	}
 	
@@ -33,6 +29,10 @@ public class ServiciosEjemplar {
 	
 	public List<Ejemplar> listadoEjemplares(){
 		return ejemplarDao.listadoEjemplares();
+	}
+	
+	public Ejemplar obtenerEjemplarporId(Long id) {
+		return ejemplarDao.obtenerEjemplarPorId(id);
 	}
 	
 	
