@@ -15,31 +15,26 @@ public class CredencialesDAO {
         this.con = con;
     }
 
-	public Long crearCredenciales(String usuario, String contrasena) {
+	public int crearCredenciales(String usuario, String contrasena, Long idPersona) {
 
-		Long idCredenciales = 0L;
-		String sqlInsertCredenciales = "INSERT INTO credenciales (usuario, password) VALUES (?, ?)";
+		int filasAfectadas = 0;
+		String sqlInsertCredenciales = "INSERT INTO credenciales (usuario, password, idPersona) VALUES (?, ?, ?)";
 
 		try (PreparedStatement ps = con.prepareStatement(sqlInsertCredenciales,
 				PreparedStatement.RETURN_GENERATED_KEYS)) {
 			ps.setString(1, usuario);
 			ps.setString(2, contrasena);
+			ps.setLong(3, idPersona);
 
-			int filasAfectadas = ps.executeUpdate();
+			filasAfectadas = ps.executeUpdate();
 
-			if (filasAfectadas > 0) {
-				try (ResultSet rs = ps.getGeneratedKeys()) {
-					if (rs.next()) {
-						idCredenciales = rs.getLong(1); // Retorna el ID autogenerado de las credenciales
-					}
-				}
-			}
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			// System.out.println("Error al insertar las credenciales.");
 		}
 
-		return idCredenciales;
+		return filasAfectadas;
 
 	}
 

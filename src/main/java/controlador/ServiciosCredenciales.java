@@ -7,15 +7,23 @@ import java.util.Properties;
 
 import conexionBD.ConexionBDD;
 import dao.CredencialesDAO;
+import dao.PersonaDAO;
 
 public class ServiciosCredenciales {
 
 	private ConexionBDD factoria;
 	private CredencialesDAO credencialesDao;
+	private PersonaDAO personaDao;
 
 	public ServiciosCredenciales() {
 		factoria = ConexionBDD.getCon();
 		credencialesDao = factoria.getCredencialesDAO();
+		personaDao = factoria.getPersonaDAO();
+	}
+	
+	
+	public int crearUsuario(String nombre,String email,String usuario,String password) {	
+		return credencialesDao.crearCredenciales(usuario, password, personaDao.insertarPersona(nombre, email));
 	}
 
 	public boolean Login(String usuario, String contrasena) {

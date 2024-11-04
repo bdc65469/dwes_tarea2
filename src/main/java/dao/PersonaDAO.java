@@ -20,7 +20,7 @@ public class PersonaDAO {
 		Long idPersona = null;
 
 		String query = "SELECT p.id FROM personas p " + 
-		"JOIN credenciales c ON p.idCredenciales = c.id "+ 
+		"JOIN credenciales c ON p.id = c.idPersona "+ 
 		"WHERE c.usuario = ?";
 
 		try (PreparedStatement statement = con.prepareStatement(query)) {
@@ -38,22 +38,29 @@ public class PersonaDAO {
 		return idPersona;
 	}
 
-	public int insertarPersona(String nombre, String email, Long idCredenciales) {
-		String sqlInsertPersona = "INSERT INTO personas (nombre, email, idCredenciales) VALUES (?, ?, ?)";
+	public Long insertarPersona(String nombre, String email) {
+		Long id = 0L;
+		String sqlInsertPersona = "INSERT INTO personas (nombre, email) VALUES (?, ?)";
 		int filasAfectadas = 0;
 		try (PreparedStatement ps = con.prepareStatement(sqlInsertPersona, PreparedStatement.RETURN_GENERATED_KEYS)) {
 			ps.setString(1, nombre);
 			ps.setString(2, email);
-			ps.setLong(3, idCredenciales);
 
 			filasAfectadas = ps.executeUpdate();
+			if (filasAfectadas > 0) {
+				try (ResultSet rs = ps.getGeneratedKeys()) {
+					if (rs.next()) {
+						id = rs.getLong(1); // Retorna el ID autogenerado de las credenciales
+					}
+				}
+			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			// System.out.println("Error al crear la persona.");
 		}
 
-		return filasAfectadas;
+		return id;
 
 	}
 

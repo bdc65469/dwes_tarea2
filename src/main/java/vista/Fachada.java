@@ -276,7 +276,7 @@ public class Fachada {
 					} while (!Comprobaciones.esContrasenaValida(password)
 							|| Comprobaciones.comprobarEspaciosBlanco(password));
 
-					if (personaServ.crearUsuario(nombre, email, usuario, password) > 0) {
+					if (credendialesServ.crearUsuario(nombre, email, usuario, password) > 0) {
 						System.out.println("Usuario registrado correctamente");
 					} else {
 						System.out.println("No se ha podido registrar el usuario");

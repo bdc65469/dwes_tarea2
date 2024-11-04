@@ -21,7 +21,6 @@ public class ConexionBDD {
 
 	private static ConexionBDD bd;
 
-	// el patron factory realiza la conexi�n
 	private ConexionBDD() {
 		Properties propiedades = new Properties();
 		MysqlDataSource m = new MysqlDataSource();
