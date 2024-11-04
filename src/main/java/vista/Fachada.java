@@ -33,6 +33,7 @@ public class Fachada {
 	ServiciosPlanta plantaServ = f.getServiciosPlanta();
 	ServiciosMensaje mensajeServ = f.getServiciosMensaje();
 	ServiciosCredenciales credendialesServ = f.getServiciosCredenciales();
+	Comprobaciones comprobaciones = f.getComprobaciones();
 
 	Sesion s = new Sesion("", Perfil.INVITADO);
 	boolean sesionActiva = true;
@@ -231,14 +232,14 @@ public class Fachada {
 						System.out.println("Introduce el email de la persona: ");
 						email = teclado.nextLine();
 
-						if (Comprobaciones.comprobarEspaciosBlanco(email)) {
+						if (comprobaciones.comprobarEspaciosBlanco(email)) {
 							System.out.println("El email no puede contener espacios en blanco");
 						}
 
 						if (personaServ.existeEmail(email)) {
 							System.out.println("El email ya existe");
 						}
-					} while (Comprobaciones.comprobarEspaciosBlanco(email) || personaServ.existeEmail(email));
+					} while (comprobaciones.comprobarEspaciosBlanco(email) || personaServ.existeEmail(email));
 
 					String usuario = "";
 
@@ -246,7 +247,7 @@ public class Fachada {
 						System.out.println("Introduce el usuario de la persona: ");
 						usuario = teclado.nextLine();
 
-						if (Comprobaciones.comprobarEspaciosBlanco(usuario)) {
+						if (comprobaciones.comprobarEspaciosBlanco(usuario)) {
 							System.out.println("El usuario no puede contener espacios en blanco");
 						}
 
@@ -257,7 +258,7 @@ public class Fachada {
 						if (credendialesServ.existeUsuario(usuario)) {
 							System.out.println("El usuario ya existe");
 						}
-					} while (Comprobaciones.comprobarEspaciosBlanco(usuario) || credendialesServ.existeUsuario(usuario)
+					} while (comprobaciones.comprobarEspaciosBlanco(usuario) || credendialesServ.existeUsuario(usuario)
 							|| usuario.equalsIgnoreCase("admin"));
 
 					String password = "";
@@ -265,16 +266,16 @@ public class Fachada {
 						System.out.println("Introduce la contraseña de la persona: ");
 						password = teclado.nextLine();
 
-						if (Comprobaciones.comprobarEspaciosBlanco(password)) {
+						if (comprobaciones.comprobarEspaciosBlanco(password)) {
 							System.out.println("La contraseña no puede contener espacios en blanco");
 						}
 
-						if (!Comprobaciones.esContrasenaValida(password)) {
+						if (!comprobaciones.esContrasenaValida(password)) {
 							System.out.println(
 									"La contraseña no es válida. Recuerda que la contraseña tiene que tener una longitud de 6 carácteres minimo, incluyendo una letra y un número mínimo");
 						}
-					} while (!Comprobaciones.esContrasenaValida(password)
-							|| Comprobaciones.comprobarEspaciosBlanco(password));
+					} while (!comprobaciones.esContrasenaValida(password)
+							|| comprobaciones.comprobarEspaciosBlanco(password));
 
 					if (credendialesServ.crearUsuario(nombre, email, usuario, password) > 0) {
 						System.out.println("Usuario registrado correctamente");
@@ -331,7 +332,7 @@ public class Fachada {
 								"Introduce el codigo de la planta (Sin números, espacios, dierisis o carácteres especiales)");
 						codigo = teclado.nextLine();
 
-						if (!Comprobaciones.esCodigoValido(codigo)) {
+						if (!comprobaciones.esCodigoValido(codigo)) {
 							System.out.println(
 									"Formato de codigo incorrecto. Recuerda que no puede contener números, espacios, dierisis o carácteres especiales");
 						}
@@ -340,28 +341,28 @@ public class Fachada {
 							System.out.println("Ya existe una planta con ese codigo");
 						}
 
-					} while (!Comprobaciones.esCodigoValido(codigo) || plantaServ.existeCodigoPlanta(codigo));
+					} while (!comprobaciones.esCodigoValido(codigo) || plantaServ.existeCodigoPlanta(codigo));
 
 					String nombrecomun = "";
 					do {
 						System.out.println("Introduce el nombre común de la planta. ");
 						nombrecomun = teclado.nextLine();
 
-						if (!Comprobaciones.nombreValido(nombrecomun)) {
+						if (!comprobaciones.nombreValido(nombrecomun)) {
 							System.out.println("Nombre comun incorrecto. No puede contener número o solo espacios");
 						}
-					} while (!Comprobaciones.nombreValido(nombrecomun));
+					} while (!comprobaciones.nombreValido(nombrecomun));
 
 					String nombrecientifico = "";
 					do {
 						System.out.println("Introduce el nombre científico de la planta");
 						nombrecientifico = teclado.nextLine();
 
-						if (!Comprobaciones.nombreValido(nombrecientifico)) {
+						if (!comprobaciones.nombreValido(nombrecientifico)) {
 							System.out
 									.println("Nombre científico incorrecto. No puede contener número o solo espacios");
 						}
-					} while (!Comprobaciones.nombreValido(nombrecientifico));
+					} while (!comprobaciones.nombreValido(nombrecientifico));
 
 					Planta nueva = new Planta(codigo.toUpperCase(), nombrecomun, nombrecientifico);
 
@@ -394,22 +395,22 @@ public class Fachada {
 									System.out.println("Introduce el nuevo nombre común de la planta. ");
 									actnombrecomun = teclado.nextLine();
 
-									if (!Comprobaciones.nombreValido(actnombrecomun)) {
+									if (!comprobaciones.nombreValido(actnombrecomun)) {
 										System.out.println(
 												"Nombre comun incorrecto. No puede contener número o solo espacios");
 									}
-								} while (!Comprobaciones.nombreValido(actnombrecomun));
+								} while (!comprobaciones.nombreValido(actnombrecomun));
 
 								String nombrecien = "";
 								do {
 									System.out.println("Introduce el nuevo nombre científico de la planta");
 									nombrecien = teclado.nextLine();
 
-									if (!Comprobaciones.nombreValido(nombrecien)) {
+									if (!comprobaciones.nombreValido(nombrecien)) {
 										System.out.println(
 												"Nombre científico incorrecto. No puede contener número o solo espacios");
 									}
-								} while (!Comprobaciones.nombreValido(nombrecien));
+								} while (!comprobaciones.nombreValido(nombrecien));
 								if (plantaServ.actualizarPlanta(plantaServ.listaPlantas().get(num - 1), actnombrecomun,
 										nombrecien) > 0) {
 									System.out.println("Actualizado correctamente");
@@ -544,7 +545,7 @@ public class Fachada {
 									System.out.println("No hay mensajes");
 								} else {
 									for (Mensaje m : mensajeServ.obtenerMensajesPorIdEjemplar(e.getId())) {
-										System.out.println("-" + m.getMensaje() + "\t Fecha: " + Comprobaciones.formatoFecha(m.getFechahora()));
+										System.out.println("-" + m.getMensaje() + "\t Fecha: " + comprobaciones.formatoFecha(m.getFechahora()));
 									}
 									System.out.println("");
 								}
@@ -583,7 +584,7 @@ public class Fachada {
 									for (Mensaje m : mensajeServ.obtenerMensajesPorIdEjemplar(
 											ejemplarServ.listadoEjemplares().get(numEjem - 1).getId())) {
 										System.out.println("-Mensaje: " + m.getMensaje() + "\t Fecha: "
-												+ Comprobaciones.formatoFecha(m.getFechahora()) + "\tCreado por: "
+												+ comprobaciones.formatoFecha(m.getFechahora()) + "\tCreado por: "
 												+ personaServ.obtenerPersonaPorId(m.getIdPersona()).getNombre()
 												+ " email: "
 												+ personaServ.obtenerPersonaPorId(m.getIdPersona()).getEmail());
@@ -691,7 +692,7 @@ public class Fachada {
 									for (Mensaje m : mensajeServ.obtenerMensajesPorPersona(
 											personaServ.obtenerIdPersonaPorUsuario(usuario))) {
 										System.out.println("-Mensaje: " + m.getMensaje() + "\t Fecha: "
-												+ Comprobaciones.formatoFecha(m.getFechahora()) + "\t Ejemplar:"
+												+ comprobaciones.formatoFecha(m.getFechahora()) + "\t Ejemplar:"
 												+ ejemplarServ.obtenerEjemplarporId(m.getIdEjemplar()).getNombre() + "\tCreado por: "
 												+ personaServ.obtenerPersonaPorId(m.getIdPersona()).getNombre());
 									}
@@ -746,11 +747,11 @@ public class Fachada {
 					
 					List<Mensaje> listaMensajesFecha = mensajeServ.obtenerMensajesPorFecha(fechaInicial, fechaFinal);
 		            if (listaMensajesFecha.isEmpty()) {
-		            	System.out.println("No hay mensajes entre el "+Comprobaciones.formatoFecha(fechaInicial)+" y el "+Comprobaciones.formatoFecha(fechaFinal));
+		            	System.out.println("No hay mensajes entre el "+comprobaciones.formatoFecha(fechaInicial)+" y el "+comprobaciones.formatoFecha(fechaFinal));
 		            }else {
 		            	for (Mensaje m: listaMensajesFecha) {
 		            		System.out.println("-Mensaje: " + m.getMensaje() + "\t Fecha: "
-									+ Comprobaciones.formatoFecha(m.getFechahora()) + "\t Ejemplar:"
+									+ comprobaciones.formatoFecha(m.getFechahora()) + "\t Ejemplar:"
 									+ ejemplarServ.obtenerEjemplarporId(m.getIdEjemplar()).getNombre() + "\tCreado por: "
 								    + personaServ.obtenerPersonaPorId(m.getIdPersona()).getNombre());
 		            	}
@@ -782,7 +783,7 @@ public class Fachada {
 									System.out.println("Mensajes de la planta "+plantaServ.listaPlantas().get(numP - 1).getNombrecomun()+": " );
 									for (Mensaje m : listaMensajes) {
 										System.out.println("-Mensaje: " + m.getMensaje() + "\t Fecha: "
-												+ Comprobaciones.formatoFecha(m.getFechahora())+ "\t Ejemplar:"
+												+ comprobaciones.formatoFecha(m.getFechahora())+ "\t Ejemplar:"
 												+ ejemplarServ.obtenerEjemplarporId(m.getIdEjemplar()).getNombre() + "\tCreado por: "
 												+ personaServ.obtenerPersonaPorId(m.getIdPersona()).getNombre());
 									}

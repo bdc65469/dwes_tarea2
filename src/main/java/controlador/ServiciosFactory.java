@@ -2,7 +2,25 @@ package controlador;
 
 public class ServiciosFactory {
 
-	public static ServiciosFactory servicios;
+	private static ServiciosFactory servicios;
+	
+	private ServiciosCredenciales serviCre;
+	private ServiciosEjemplar serviEjem;
+	private ServiciosMensaje serviMen;
+	private ServiciosPersona serviPer;
+	private ServiciosPlanta serviPlan;
+	private Comprobaciones comprobaciones;
+	
+	private ServiciosFactory() {
+		
+		serviCre = new ServiciosCredenciales();
+		serviEjem = new ServiciosEjemplar();
+		serviMen = new ServiciosMensaje();
+		serviPer = new ServiciosPersona();
+		serviPlan = new ServiciosPlanta();
+		comprobaciones = new Comprobaciones();
+		
+	}
 
 	public static ServiciosFactory getServicios() {
 		if (servicios == null)
@@ -12,23 +30,27 @@ public class ServiciosFactory {
 	}
 	
 	public ServiciosEjemplar getServiciosEjemplar() {
-		return new ServiciosEjemplar();
+		return serviEjem;
 	}
 	
 	public ServiciosPersona getServiciosPersona() {
-		return new ServiciosPersona();
+		return serviPer;
 	}
 	
 	public ServiciosPlanta getServiciosPlanta() {
-		return new ServiciosPlanta();
+		return serviPlan;
 	}
 	
 	public ServiciosMensaje getServiciosMensaje() {
-		return new ServiciosMensaje();
+		return serviMen;
 	}
 	
 	public ServiciosCredenciales getServiciosCredenciales() {
-		return new ServiciosCredenciales();
+		return serviCre;
+	}
+	
+	public Comprobaciones getComprobaciones() {
+		return comprobaciones;
 	}
 
 }

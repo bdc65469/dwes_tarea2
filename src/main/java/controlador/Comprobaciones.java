@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Comprobaciones {
+	
+	public Comprobaciones () {};
 
 	/**
 	 * Método para comprobar que el codigo no contiene ni espacios, ni caracteres
@@ -13,7 +15,7 @@ public class Comprobaciones {
 	 * @return True si el código es válido, False si el código no es válido
 	 */
 
-	public static boolean comprobarEspaciosBlanco(String s) {
+	public boolean comprobarEspaciosBlanco(String s) {
 		if (s == null || s.length() == 0) {
 			return true;
 		}
@@ -25,7 +27,7 @@ public class Comprobaciones {
 	 * @param nombre String a comprobar
 	 * @return True si el formato del string es correcto, false si es incorrecto
 	 */
-	public static boolean nombreValido(String nombre) {
+	public boolean nombreValido(String nombre) {
 
 		if (nombre == null || nombre.trim().isEmpty()) {
 			return false;
@@ -36,7 +38,7 @@ public class Comprobaciones {
 		return true;
 	}
 
-	public static boolean esCodigoValido(String codigo) {
+	public boolean esCodigoValido(String codigo) {
 
 		if (codigo == null || codigo.isEmpty()) {
 			return false;
@@ -44,7 +46,7 @@ public class Comprobaciones {
 		return codigo.matches("[a-zA-Z]+");
 	}
 
-	public static boolean esContrasenaValida(String contrasena) {
+	public  boolean esContrasenaValida(String contrasena) {
 		// Verificar longitud mínima de 6 caracteres
 		if (contrasena == null || contrasena.length() < 6) {
 			return false;
@@ -72,7 +74,7 @@ public class Comprobaciones {
 		return false;
 	}
 	
-	public static String formatoFecha(LocalDateTime l) {
+	public String formatoFecha(LocalDateTime l) {
 		  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy HH:mm:ss");        
 	      String fechaHoraFormateada = l.format(formatter);
 	      return fechaHoraFormateada;

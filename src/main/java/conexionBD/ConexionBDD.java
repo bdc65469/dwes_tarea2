@@ -41,11 +41,11 @@ public class ConexionBDD {
 
 
 		} catch (FileNotFoundException e) {
-			System.out.println("Error al acceder al fichero properties " + e.getMessage());
+			System.err.println("Error al acceder al fichero properties " + e.getMessage());
 		} catch (IOException e) {
-			System.out.println("Error al leer las propiedades del fichero properties" + e.getMessage());
+			System.err.println("Error al leer las propiedades del fichero properties" + e.getMessage());
 		} catch (SQLException e) {
-			System.out.println("Error al conectar a la base de datos:usuario,password....");
+			System.err.println("Error al conectar a la base de datos....");
 		}
 	}
 	
