@@ -3,6 +3,7 @@ package vista;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 import controlador.Comprobaciones;
@@ -87,9 +88,7 @@ public class FachadaEjemplares {
 									if (nuevoEjemplar == null) {
 										System.err.println("Error al crear el ejemplar");
 									} else {
-										String mensaje = "Primer mensaje del ejemplar creado a las: "
-												+ comprobaciones.formatoFecha(LocalDateTime.now()) + " por el usuario "
-												+ s.getUsuario();
+										String mensaje = "Nuevo ejemplar de "+escogida.getNombrecomun()+" creado.";
 										Mensaje nuevo = new Mensaje(LocalDateTime.now(), mensaje, nuevoEjemplar.getId(),
 												personaServ.obtenerIdPersonaPorUsuario(s.getUsuario()));
 										if (mensajeServ.crearMensaje(nuevo) > 0) {
@@ -153,18 +152,23 @@ public class FachadaEjemplares {
 										+ plantaServ.listaPlantas().get(i - 1).getNombrecomun());
 							} else {
 								System.out.println("Ejemplares de la planta "
-										+ plantaServ.listaPlantas().get(i - 1).getNombrecomun());
+										+ plantaServ.listaPlantas().get(i - 1).getNombrecomun()+": ");
 								for (Ejemplar e : ejemplarServ
 										.filtarEjemplaresPlanta(plantaServ.listaPlantas().get(i - 1))) {
-									System.out.println(e.getNombre() + "\n Mensajes: ");
+									
 									if (mensajeServ.obtenerMensajesPorIdEjemplar(e.getId()).size() == 0) {
-										System.out.println("No hay mensajes");
+										System.out.println("-Ejemplar: "+e.getNombre() + "\t Nº Mensajes: 0");
 									} else {
-										for (Mensaje m : mensajeServ.obtenerMensajesPorIdEjemplar(e.getId())) {
-											System.out.println("-" + m.getMensaje() + "\t Fecha: "
-													+ comprobaciones.formatoFecha(m.getFechahora()));
+										List<Mensaje> listaMensajes = mensajeServ.obtenerMensajesPorIdEjemplar(e.getId());
+										LocalDateTime ultimo = mensajeServ.obtenerMensajesPorIdEjemplar(e.getId()).get(0).getFechahora();										
+										for (int m=0; m<listaMensajes.size(); m++) {
+											if(ultimo.isBefore(listaMensajes.get(m).getFechahora())) {
+												ultimo = listaMensajes.get(m).getFechahora();
+											}
 										}
-										System.out.println("");
+										System.out.printf("%-50s %-40s %-60s %n", "NOMBRE EJEMPLAR", "NºMENSAJES", "FECHA DEL ÚLTIMO MENSAJE");
+										System.out.printf("%-50s %-40s %-60s %n", e.getNombre() , listaMensajes.size(), comprobaciones.formatoFecha(ultimo));
+										
 									}
 								}
 								System.out.println("");
@@ -204,13 +208,14 @@ public class FachadaEjemplares {
 									} else {
 										System.out.println("Mensajes del ejemplar "
 												+ ejemplarServ.listadoEjemplares().get(numEjem - 1).getNombre() + "\n");
+										System.out.printf("%-80s %-30s %-20s %20s%n", "MENSAJE", "FECHA", "AUTOR", "EMAIL AUTOR");
 										for (Mensaje m : mensajeServ.obtenerMensajesPorIdEjemplar(
 												ejemplarServ.listadoEjemplares().get(numEjem - 1).getId())) {
-											System.out.println("-Mensaje: " + m.getMensaje() + "\t Fecha: "
-													+ comprobaciones.formatoFecha(m.getFechahora()) + "\tCreado por: "
-													+ personaServ.obtenerPersonaPorId(m.getIdPersona()).getNombre()
-													+ " email: "
-													+ personaServ.obtenerPersonaPorId(m.getIdPersona()).getEmail());
+											
+											System.out.printf("%-80s %-30s %-20s %20s%n",m.getMensaje(),
+													comprobaciones.formatoFecha(m.getFechahora()),
+													personaServ.obtenerPersonaPorId(m.getIdPersona()).getNombre(),
+													personaServ.obtenerPersonaPorId(m.getIdPersona()).getEmail());
 										}
 									}
 								}

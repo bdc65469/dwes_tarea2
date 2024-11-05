@@ -18,7 +18,7 @@ import controlador.Sesion;
 import modelo.Mensaje;
 
 public class FachadaMensajes {
-	
+
 	private Scanner teclado = new Scanner(System.in);
 	private ServiciosFactory f = ServiciosFactory.getServicios();
 	private ServiciosPlanta plantaServ = f.getServiciosPlanta();
@@ -27,13 +27,13 @@ public class FachadaMensajes {
 	private ServiciosPersona personaServ = f.getServiciosPersona();
 	private ServiciosMensaje mensajeServ = f.getServiciosMensaje();
 	private ServiciosCredenciales credendialesServ = f.getServiciosCredenciales();
-	
+
 	private Sesion s;
-	
+
 	public FachadaMensajes(Sesion s) {
 		this.s = s;
 	}
-	
+
 	public void menuGestionarMensajes() {
 		System.out.println("");
 		System.out.println("***********************************************");
@@ -45,7 +45,7 @@ public class FachadaMensajes {
 		System.out.println("0.  Salir.");
 		System.out.println("Seleccione una opcion:");
 	}
-	
+
 	public void mostrarMenuGestionarMensajes() {
 		int opcion = -1;
 		do {
@@ -85,24 +85,26 @@ public class FachadaMensajes {
 								} else {
 									String mensaje = "";
 									do {
+
 										System.out.println("Introduce el mensaje que quieres añadir: ");
 										mensaje = teclado.nextLine();
 
-										if (mensaje.length() == 0) {
-											System.out.println("No puedes añadir un mensaje vacio.");
+										if (!comprobaciones.esMensajeValido(mensaje)) {
+											System.out.println("Formato de mensaje no correcto.");
 										} else {
 											nuevo = new Mensaje(LocalDateTime.now(), mensaje,
 													ejemplarServ.listadoEjemplares().get(num - 1).getId(),
 													personaServ.obtenerIdPersonaPorUsuario(s.getUsuario()));
+
+											if (mensajeServ.crearMensaje(nuevo) > 0) {
+												System.out.println("Mensaje añadido correctamente.");
+											} else {
+												System.err.println("No se ha podido añadir el mensaje.");
+											}
+
 										}
 
-										if (mensajeServ.crearMensaje(nuevo) > 0) {
-											System.out.println("Mensaje añadido correctamente.");
-										} else {
-											System.err.println("No se ha podido añadir el mensaje.");
-										}
-
-									} while (mensaje.length() == 0);
+									} while (!comprobaciones.esMensajeValido(mensaje));
 
 								}
 							} catch (InputMismatchException e) {
@@ -131,13 +133,14 @@ public class FachadaMensajes {
 									System.out.println("El usuario " + usuario + " no ha escrito ningun mensaje");
 								} else {
 									System.out.println("Mensajes del usuario " + usuario + " :");
+									System.out.printf("%-80s %-30s %-20s %20s%n", "MENSAJE", "FECHA", "EJEMPLAR",
+											"AUTOR");
 									for (Mensaje m : mensajeServ.obtenerMensajesPorPersona(
 											personaServ.obtenerIdPersonaPorUsuario(usuario))) {
-										System.out.println("-Mensaje: " + m.getMensaje() + "\t Fecha: "
-												+ comprobaciones.formatoFecha(m.getFechahora()) + "\t Ejemplar:"
-												+ ejemplarServ.obtenerEjemplarporId(m.getIdEjemplar()).getNombre()
-												+ "\tCreado por: "
-												+ personaServ.obtenerPersonaPorId(m.getIdPersona()).getNombre());
+										System.out.printf("%-80s %-30s %-20s %20s%n", m.getMensaje(),
+												comprobaciones.formatoFecha(m.getFechahora()),
+												ejemplarServ.obtenerEjemplarporId(m.getIdEjemplar()).getNombre(),
+												personaServ.obtenerPersonaPorId(m.getIdPersona()).getNombre());
 									}
 								}
 							}
@@ -158,9 +161,13 @@ public class FachadaMensajes {
 							String inputInicial = teclado.nextLine();
 							fechaInicial = LocalDateTime.parse(inputInicial, formatter);
 
-							System.out.print("Introduce la fecha final (dd/MM/yy HH:mm:ss): ");
+							System.out.print("Introduce la fecha final (dd/MM/yy HH:mm:ss). Si no introduces nada, cogerá la fecha y hora actuales: ");
 							String inputFinal = teclado.nextLine();
-							fechaFinal = LocalDateTime.parse(inputFinal, formatter);
+							if (inputFinal.trim().isEmpty()) {
+								fechaFinal = LocalDateTime.now();
+							} else {
+								fechaFinal = LocalDateTime.parse(inputFinal, formatter);
+							}
 
 							// Verificar que ambas fechas sean anteriores o iguales a la fecha actual
 							if (fechaInicial.isAfter(fechaHoraActual)) {
@@ -168,10 +175,11 @@ public class FachadaMensajes {
 								continue;
 							}
 
+							/*
 							if (fechaFinal.isAfter(fechaHoraActual)) {
 								System.err.println("La fecha final no puede ser posterior a la fecha y hora actual.");
 								continue;
-							}
+							}*/
 
 							// Verificar que la fecha inicial sea menor que la fecha final
 							if (fechaInicial.isAfter(fechaFinal)) {
@@ -193,11 +201,12 @@ public class FachadaMensajes {
 						System.out.println("No hay mensajes entre el " + comprobaciones.formatoFecha(fechaInicial)
 								+ " y el " + comprobaciones.formatoFecha(fechaFinal));
 					} else {
+						System.out.printf("%-80s %-30s %-20s %20s%n", "MENSAJE", "FECHA", "EJEMPLAR", "AUTOR");
 						for (Mensaje m : listaMensajesFecha) {
-							System.out.println("-Mensaje: " + m.getMensaje() + "\t Fecha: "
-									+ comprobaciones.formatoFecha(m.getFechahora()) + "\t Ejemplar:"
-									+ ejemplarServ.obtenerEjemplarporId(m.getIdEjemplar()).getNombre()
-									+ "\tCreado por: " + personaServ.obtenerPersonaPorId(m.getIdPersona()).getNombre());
+							System.out.printf("%-80s %-30s %-20s %20s%n", m.getMensaje(),
+									comprobaciones.formatoFecha(m.getFechahora()),
+									ejemplarServ.obtenerEjemplarporId(m.getIdEjemplar()).getNombre(),
+									personaServ.obtenerPersonaPorId(m.getIdPersona()).getNombre());
 						}
 					}
 
@@ -231,12 +240,12 @@ public class FachadaMensajes {
 									} else {
 										System.out.println("Mensajes de la planta "
 												+ plantaServ.listaPlantas().get(numP - 1).getNombrecomun() + ": ");
+										System.out.printf("%-80s %-30s %-20s %20s%n", "MENSAJE", "FECHA", "EJEMPLAR", "AUTOR");
 										for (Mensaje m : listaMensajes) {
-											System.out.println("-Mensaje: " + m.getMensaje() + "\t Fecha: "
-													+ comprobaciones.formatoFecha(m.getFechahora()) + "\t Ejemplar:"
-													+ ejemplarServ.obtenerEjemplarporId(m.getIdEjemplar()).getNombre()
-													+ "\tCreado por: "
-													+ personaServ.obtenerPersonaPorId(m.getIdPersona()).getNombre());
+											System.out.printf("%-80s %-30s %-20s %20s%n", m.getMensaje(),
+													comprobaciones.formatoFecha(m.getFechahora()),
+													ejemplarServ.obtenerEjemplarporId(m.getIdEjemplar()).getNombre(),
+													personaServ.obtenerPersonaPorId(m.getIdPersona()).getNombre());
 										}
 									}
 								}
@@ -251,7 +260,7 @@ public class FachadaMensajes {
 					break;
 
 				case 0:
-					//Cerrar menu
+					// Cerrar menu
 					return;
 				}
 			} catch (InputMismatchException e) {

@@ -8,12 +8,12 @@ public class Comprobaciones {
 	public Comprobaciones () {};
 	
 	/**
-	 * verifica si el nombre de la persona es correcto, no puede contener números, ni carácteres
+	 * verifica si el nombre de la persona es correcto, no puede contener números, ni carácteres, ni tabulaciones
 	 * @param nombre Nombre de la persona
 	 * @return true si es correcto, false si es incorrecto
 	 */
-	public boolean verificarNombrePersona(String nombre) {		
-		 return nombre != null && nombre.matches("^[a-zA-ZÀ-ÿÑñ'\\-\\s]{1,25}$");
+	public boolean verificarNombrePersona(String nombre) {						
+		return nombre != null && nombre.matches("^[a-zA-ZÀ-ÿÑñ']+( [a-zA-ZÀ-ÿÑñ']+)*$");		
 	}
 	
 	/**
@@ -41,15 +41,12 @@ public class Comprobaciones {
 	}
 	
 	/**
-	 * Comprueba si usuario tiene espacios en blanco, es nulo o más de 50 carácteres
+	 * Comprueba si usuario tiene espacios en blanco, tabulaciones, es nulo o más de 50 carácteres
 	 * @param s usuario de la persona
 	 * @return true si no es válido, false si es valido
 	 */
 	public boolean comprobarUsuario(String s) {
-		if (s == null || s.length() == 0 || s.length()>50) {
-			return true;
-		}
-		return s.contains(" ");
+		return s == null || s.length() == 0 || s.length() > 50 || s.matches(".*\\s.*");
 	}
 
 	/**
@@ -68,6 +65,11 @@ public class Comprobaciones {
 		return true;
 	}
 
+	/**
+	 * Metodo que comprueba si el string es valido. No puede contener ni espacios, ni numeros
+	 * @param codigo Codigo introducido
+	 * @return True si el formato del string es correcto, false si es incorrecto
+	 */
 	public boolean esCodigoValido(String codigo) {
 
 		if (codigo == null || codigo.isEmpty() || codigo.length()>50)  {
@@ -76,17 +78,21 @@ public class Comprobaciones {
 		return codigo.matches("[a-zA-Z]+");
 	}
 
+	/**
+	 * Metodo para comprobar que la contraseña sea válida, debe contener mínimo 6 caractes y maximo 50, no contener espacios en blanco, ni tabulaciones y un número
+	 * y una letra como mínimo
+	 * @param contrasena
+	 * @return true si la contraseña es válida, false si no es válida
+	 */
 	public  boolean esContrasenaValida(String contrasena) {
-		// Verificar longitud mínima de 6 caracteres
-		if (contrasena == null || contrasena.length() < 6) {
+		if (contrasena == null || contrasena.length() < 6 || contrasena.length() > 50 || contrasena.matches(".*\\s.*")) {
 			return false;
 		}
 
-		// Variables para verificar la presencia de al menos una letra y un número
 		boolean tieneLetra = false;
 		boolean tieneNumero = false;
 
-		// Recorrer cada caracter de la contraseña
+		
 		for (char c : contrasena.toCharArray()) {
 			if (Character.isLetter(c)) {
 				tieneLetra = true;
@@ -94,16 +100,33 @@ public class Comprobaciones {
 			if (Character.isDigit(c)) {
 				tieneNumero = true;
 			}
-			// Si ya tiene ambos, no hace falta seguir buscando
+			
 			if (tieneLetra && tieneNumero) {
 				return true;
 			}
 		}
 
-		// Retorna true si cumple con ambas condiciones; de lo contrario, false
+		
 		return false;
 	}
 	
+	/**
+	 * Metodo que verifica que el mensaje no sea nulo, no esté vacío, no contenga solo espacios y tenga máximo 500 caracteres
+	 * @param mensaje texto que escribe el usuario
+	 * @return true si es valido, false si no lo es
+	 */
+	public boolean esMensajeValido(String mensaje) { 
+	    if (mensaje == null || mensaje.trim().isEmpty() || mensaje.length() > 500) {
+	        return false;
+	    }
+	    return true;
+	}
+	
+	/**
+	 * Formatea la fecha 
+	 * @param l Fecha introducida
+	 * @return Devuele la fecha con el formato deseado
+	 */
 	public String formatoFecha(LocalDateTime l) {
 		  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy HH:mm:ss");        
 	      String fechaHoraFormateada = l.format(formatter);
