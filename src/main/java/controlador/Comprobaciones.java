@@ -6,6 +6,24 @@ import java.time.format.DateTimeFormatter;
 public class Comprobaciones {
 	
 	public Comprobaciones () {};
+	
+	/**
+	 * verifica si el nombre de la persona es correcto, no puede contener números, ni carácteres
+	 * @param nombre Nombre de la persona
+	 * @return true si es correcto, false si es incorrecto
+	 */
+	public boolean verificarNombrePersona(String nombre) {		
+		 return nombre != null && nombre.matches("^[a-zA-ZÀ-ÿÑñ'\\-\\s]{1,25}$");
+	}
+	
+	/**
+	 * Comprueba si sigue la estructura del email
+	 * @param email Email del usuario
+	 * @return True si el email es válido, false si no es válido
+	 */
+    public  boolean esEmailValido(String email) {
+        return email != null && email.length() <= 50 && email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    }
 
 	/**
 	 * Método para comprobar que el codigo no contiene ni espacios, ni caracteres
@@ -17,6 +35,18 @@ public class Comprobaciones {
 
 	public boolean comprobarEspaciosBlanco(String s) {
 		if (s == null || s.length() == 0) {
+			return true;
+		}
+		return s.contains(" ");
+	}
+	
+	/**
+	 * Comprueba si usuario tiene espacios en blanco, es nulo o más de 50 carácteres
+	 * @param s usuario de la persona
+	 * @return true si no es válido, false si es valido
+	 */
+	public boolean comprobarUsuario(String s) {
+		if (s == null || s.length() == 0 || s.length()>50) {
 			return true;
 		}
 		return s.contains(" ");

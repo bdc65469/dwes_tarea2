@@ -20,7 +20,6 @@ public class EjemplarDAO {
 		this.con = con;
 	}
 
-	// Me falta añadir lo del mensaje todavia
 	/**
 	 * Crea una un ejemplar a partir de una planta, pero como el nombre del ejemplar
 	 * lleva un id autogenerado necesitamos generar primero el id y luego

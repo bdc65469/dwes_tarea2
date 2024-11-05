@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.Timestamp;
 
 import modelo.Mensaje;
 import modelo.Planta;
@@ -27,7 +28,7 @@ public class MensajeDAO {
 
 		try (PreparedStatement statement = con.prepareStatement(query)) {
 
-			statement.setTimestamp(1, java.sql.Timestamp.valueOf(mensaje.getFechahora()));
+			statement.setTimestamp(1, Timestamp.valueOf(mensaje.getFechahora()));
 			statement.setString(2, mensaje.getMensaje()); 
 			statement.setLong(3, mensaje.getIdEjemplar()); 
 			statement.setLong(4, mensaje.getIdPersona()); 
@@ -84,8 +85,8 @@ public class MensajeDAO {
 
 		try (PreparedStatement stmt = con.prepareStatement(sql)) {
 			// Configura los parámetros del rango de fechas
-			stmt.setTimestamp(1, java.sql.Timestamp.valueOf(fechaInicio));
-			stmt.setTimestamp(2, java.sql.Timestamp.valueOf(fechaFin));
+			stmt.setTimestamp(1, Timestamp.valueOf(fechaInicio));
+			stmt.setTimestamp(2, Timestamp.valueOf(fechaFin));
 
 			try (ResultSet rs = stmt.executeQuery()) {
 				while (rs.next()) {
