@@ -53,13 +53,13 @@ public class Comprobaciones {
 	}
 
 	/**
-	 * Metodo que comprueba si el string introducido contiene solo espacios o numeros
+	 * Metodo que comprueba si el string introducido contiene solo espacios o numeros y la longitud del string
 	 * @param nombre String a comprobar
 	 * @return True si el formato del string es correcto, false si es incorrecto
 	 */
 	public boolean nombreValido(String nombre) {
 
-		if (nombre == null || nombre.trim().isEmpty()) {
+		if (nombre == null || nombre.trim().isEmpty() || nombre.length()>100) {
 			return false;
 		}
 		if (nombre.matches(".*\\d.*")) {
@@ -70,7 +70,7 @@ public class Comprobaciones {
 
 	public boolean esCodigoValido(String codigo) {
 
-		if (codigo == null || codigo.isEmpty()) {
+		if (codigo == null || codigo.isEmpty() || codigo.length()>50)  {
 			return false;
 		}
 		return codigo.matches("[a-zA-Z]+");

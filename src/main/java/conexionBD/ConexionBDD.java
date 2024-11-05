@@ -28,7 +28,6 @@ public class ConexionBDD {
 
 		 try (InputStream inputStream = ConexionBDD.class.getClassLoader().getResourceAsStream("db.properties")) {
 		        if (inputStream == null) {
-		            System.out.println("Archivo de configuración no encontrado en el classpath");
 		            return;
 		        }
 		        propiedades.load(inputStream);

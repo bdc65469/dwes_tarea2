@@ -87,11 +87,7 @@ public class FachadaEjemplares {
 									if (nuevoEjemplar == null) {
 										System.err.println("Error al crear el ejemplar");
 									} else {
-										/*
-										 * System.out.println("Introduce el mensaje que quieres añadir al ejemplar.");
-										 * String mensaje = teclado.nextLine();
-										 */
-										String mensaje = "Mensaje creado a las: "
+										String mensaje = "Primer mensaje del ejemplar creado a las: "
 												+ comprobaciones.formatoFecha(LocalDateTime.now()) + " por el usuario "
 												+ s.getUsuario();
 										Mensaje nuevo = new Mensaje(LocalDateTime.now(), mensaje, nuevoEjemplar.getId(),
