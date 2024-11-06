@@ -92,10 +92,11 @@ public class FachadaPlantas {
 					if (plantaServ.listaPlantas().size() == 0) {
 						System.out.println("No hay plantas registradas");
 					} else {
-						System.out.println("Lista de plantas");
+						System.out.println("LISTA DE PLANTAS");
+						System.out.printf("%-10s %-30s %-40s %20s%n", "ÍNDICE", "NOMBRE COMÚN", "NOMBRE CIENTÍFICO", "CODIGO");
+						System.out.println("----------------------------------------------------------------------------------------------------------------------------");
 						for (int i = 0; i < plantaServ.listaPlantas().size(); i++) {
-							int numero = i + 1;
-							System.out.println(numero + "ª " + plantaServ.listaPlantas().get(i));
+							System.out.printf("%-10s %-30s %-40s %20s%n", i+1, plantaServ.listaPlantas().get(i).getNombrecomun(), plantaServ.listaPlantas().get(i).getNombrecientifico(), plantaServ.listaPlantas().get(i).getCodigo());
 						}
 						int numFinal = plantaServ.listaPlantas().size();
 						int num = 0;

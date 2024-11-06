@@ -41,7 +41,7 @@ public class Planta {
 
 	@Override
 	public String toString() {
-		return "Planta    Nombre común: "+this.nombrecomun+ "\t\t Nombre científico: "+ this.nombrecientifico+ "\t\t Código: "+this.codigo;
+		return this.nombrecomun;
 	}
 	
 	

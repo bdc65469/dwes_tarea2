@@ -64,10 +64,11 @@ public class FachadaMensajes {
 					if (ejemplarServ.listadoEjemplares().size() == 0) {
 						System.out.println("No hay ejemplares registrados");
 					} else {
-						System.out.println("Lista de ejemplares");
+						System.out.println("LISTA DE EJEMPLARES");
+						System.out.printf("%-10s %-30s%n", "ÍNDICE", "NOMBRE");
+						System.out.println("---------------------");
 						for (int i = 0; i < ejemplarServ.listadoEjemplares().size(); i++) {
-							int numero = i + 1;
-							System.out.println(numero + "ª " + ejemplarServ.listadoEjemplares().get(i));
+							System.out.printf("%-10s %-30s%n", i+1, ejemplarServ.listadoEjemplares().get(i).getNombre());
 						}
 						int numFinal = ejemplarServ.listadoEjemplares().size();
 						int num = 0;
@@ -135,6 +136,7 @@ public class FachadaMensajes {
 									System.out.println("Mensajes del usuario " + usuario + " :");
 									System.out.printf("%-80s %-30s %-20s %20s%n", "MENSAJE", "FECHA", "EJEMPLAR",
 											"AUTOR");
+									System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------------------");
 									for (Mensaje m : mensajeServ.obtenerMensajesPorPersona(
 											personaServ.obtenerIdPersonaPorUsuario(usuario))) {
 										System.out.printf("%-80s %-30s %-20s %20s%n", m.getMensaje(),
@@ -175,12 +177,6 @@ public class FachadaMensajes {
 								continue;
 							}
 
-							/*
-							if (fechaFinal.isAfter(fechaHoraActual)) {
-								System.err.println("La fecha final no puede ser posterior a la fecha y hora actual.");
-								continue;
-							}*/
-
 							// Verificar que la fecha inicial sea menor que la fecha final
 							if (fechaInicial.isAfter(fechaFinal)) {
 								System.err.println("La fecha inicial debe ser anterior a la fecha final.");
@@ -202,6 +198,7 @@ public class FachadaMensajes {
 								+ " y el " + comprobaciones.formatoFecha(fechaFinal));
 					} else {
 						System.out.printf("%-80s %-30s %-20s %20s%n", "MENSAJE", "FECHA", "EJEMPLAR", "AUTOR");
+						System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------------");
 						for (Mensaje m : listaMensajesFecha) {
 							System.out.printf("%-80s %-30s %-20s %20s%n", m.getMensaje(),
 									comprobaciones.formatoFecha(m.getFechahora()),
@@ -216,16 +213,17 @@ public class FachadaMensajes {
 					if (plantaServ.listaPlantas().size() == 0) {
 						System.out.println("No hay plantas registradas");
 					} else {
-						System.out.println("Lista de plantas");
+						System.out.println("LISTA DE PLANTAS");
+						System.out.printf("%-10s %-30s %-40s %20s%n", "ÍNDICE", "NOMBRE COMÚN", "NOMBRE CIENTÍFICO", "CODIGO");
+						System.out.println("----------------------------------------------------------------------------------------------------------------------------");
 						for (int i = 0; i < plantaServ.listaPlantas().size(); i++) {
-							int numero = i + 1;
-							System.out.println(numero + "ª " + plantaServ.listaPlantas().get(i));
+							System.out.printf("%-10s %-30s %-40s %20s%n", i+1, plantaServ.listaPlantas().get(i).getNombrecomun(), plantaServ.listaPlantas().get(i).getNombrecientifico(), plantaServ.listaPlantas().get(i).getCodigo());
 						}
 						int numPlanta = plantaServ.listaPlantas().size();
 						int numP = 0;
 						do {
 							try {
-								System.out.println("Introduce el numero de la planta que quieres ver sus mensajes: ");
+								System.out.println("Introduce el índice de la planta que quieres ver sus mensajes: ");
 								numP = teclado.nextInt();
 								teclado.nextLine();
 								if (numP < 1 || numP > numPlanta) {
@@ -241,6 +239,7 @@ public class FachadaMensajes {
 										System.out.println("Mensajes de la planta "
 												+ plantaServ.listaPlantas().get(numP - 1).getNombrecomun() + ": ");
 										System.out.printf("%-80s %-30s %-20s %20s%n", "MENSAJE", "FECHA", "EJEMPLAR", "AUTOR");
+										System.out.println("----------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 										for (Mensaje m : listaMensajes) {
 											System.out.printf("%-80s %-30s %-20s %20s%n", m.getMensaje(),
 													comprobaciones.formatoFecha(m.getFechahora()),

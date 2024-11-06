@@ -62,10 +62,11 @@ public class FachadaEjemplares {
 					if (plantaServ.listaPlantas().size() == 0) {
 						System.out.println("No hay plantas registradas.");
 					} else {
-						System.out.println("Lista de plantas");
+						System.out.println("LISTA DE PLANTAS");
+						System.out.printf("%-10s %-30s %-40s %20s%n", "ÍNDICE", "NOMBRE COMÚN", "NOMBRE CIENTÍFICO", "CODIGO");
+						System.out.println("----------------------------------------------------------------------------------------------------------------------------");
 						for (int i = 0; i < plantaServ.listaPlantas().size(); i++) {
-							int numero = i + 1;
-							System.out.println(numero + "ª " + plantaServ.listaPlantas().get(i));
+							System.out.printf("%-10s %-30s %-40s %20s%n", i+1, plantaServ.listaPlantas().get(i).getNombrecomun(), plantaServ.listaPlantas().get(i).getNombrecientifico(), plantaServ.listaPlantas().get(i).getCodigo());
 						}
 						int numFinal = plantaServ.listaPlantas().size();
 						int num = 0;
@@ -112,10 +113,11 @@ public class FachadaEjemplares {
 					if (plantaServ.listaPlantas().size() == 0) {
 						System.out.println("No hay plantas registradas.");
 					} else {
-						System.out.println("Lista de plantas");
+						System.out.println("LISTA DE PLANTAS");
+						System.out.printf("%-10s %-30s %-40s %20s%n", "ÍNDICE", "NOMBRE COMÚN", "NOMBRE CIENTÍFICO", "CODIGO");
+						System.out.println("----------------------------------------------------------------------------------------------------------------------------");
 						for (int i = 0; i < plantaServ.listaPlantas().size(); i++) {
-							int numero = i + 1;
-							System.out.println(numero + "ª " + plantaServ.listaPlantas().get(i));
+							System.out.printf("%-10s %-30s %-40s %20s%n", i+1, plantaServ.listaPlantas().get(i).getNombrecomun(), plantaServ.listaPlantas().get(i).getNombrecientifico(), plantaServ.listaPlantas().get(i).getCodigo());
 						}
 						int numFinal1 = plantaServ.listaPlantas().size();
 						int num1 = 0;
@@ -151,13 +153,15 @@ public class FachadaEjemplares {
 								System.out.println("No hay ejemplares de la planta "
 										+ plantaServ.listaPlantas().get(i - 1).getNombrecomun());
 							} else {
-								System.out.println("Ejemplares de la planta "
-										+ plantaServ.listaPlantas().get(i - 1).getNombrecomun()+": ");
+								System.out.println("EJEMPLARES PLANTA -->  "
+										+ plantaServ.listaPlantas().get(i - 1).getNombrecomun());
+								System.out.printf("%-50s %-40s %-60s %n", "NOMBRE EJEMPLAR", "NºMENSAJES", "FECHA DEL ÚLTIMO MENSAJE");
+								System.out.println("-------------------------------------------------------------------------------------------------------------------");
 								for (Ejemplar e : ejemplarServ
 										.filtarEjemplaresPlanta(plantaServ.listaPlantas().get(i - 1))) {
 									
 									if (mensajeServ.obtenerMensajesPorIdEjemplar(e.getId()).size() == 0) {
-										System.out.println("-Ejemplar: "+e.getNombre() + "\t Nº Mensajes: 0");
+										System.out.printf("%-50s %-40s %-60s %n", e.getNombre(), 0, "NULA");
 									} else {
 										List<Mensaje> listaMensajes = mensajeServ.obtenerMensajesPorIdEjemplar(e.getId());
 										LocalDateTime ultimo = mensajeServ.obtenerMensajesPorIdEjemplar(e.getId()).get(0).getFechahora();										
@@ -166,7 +170,7 @@ public class FachadaEjemplares {
 												ultimo = listaMensajes.get(m).getFechahora();
 											}
 										}
-										System.out.printf("%-50s %-40s %-60s %n", "NOMBRE EJEMPLAR", "NºMENSAJES", "FECHA DEL ÚLTIMO MENSAJE");
+										
 										System.out.printf("%-50s %-40s %-60s %n", e.getNombre() , listaMensajes.size(), comprobaciones.formatoFecha(ultimo));
 										
 									}
@@ -182,10 +186,11 @@ public class FachadaEjemplares {
 					if (ejemplarServ.listadoEjemplares().size() == 0) {
 						System.out.println("No hay ejemplares registrados.");
 					} else {
-						System.out.println("Lista de ejemplares");
+						System.out.println("LISTA DE EJEMPLARES");
+						System.out.printf("%-10s %-30s%n", "ÍNDICE", "NOMBRE");
+						System.out.println("---------------------");
 						for (int i = 0; i < ejemplarServ.listadoEjemplares().size(); i++) {
-							int numero = i + 1;
-							System.out.println(numero + "ª " + ejemplarServ.listadoEjemplares().get(i));
+							System.out.printf("%-10s %-30s%n", i+1, ejemplarServ.listadoEjemplares().get(i).getNombre());
 						}
 						int numFinalEjem = ejemplarServ.listadoEjemplares().size();
 						int numEjem = 0;
@@ -209,6 +214,7 @@ public class FachadaEjemplares {
 										System.out.println("Mensajes del ejemplar "
 												+ ejemplarServ.listadoEjemplares().get(numEjem - 1).getNombre() + "\n");
 										System.out.printf("%-80s %-30s %-20s %20s%n", "MENSAJE", "FECHA", "AUTOR", "EMAIL AUTOR");
+										System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------");
 										for (Mensaje m : mensajeServ.obtenerMensajesPorIdEjemplar(
 												ejemplarServ.listadoEjemplares().get(numEjem - 1).getId())) {
 											
