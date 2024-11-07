@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 04-11-2024 a las 10:58:39
+-- Tiempo de generación: 07-11-2024 a las 13:30:14
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -33,7 +33,7 @@ CREATE TABLE `credenciales` (
   `id` int(11) NOT NULL,
   `usuario` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
-  `idPersona` int(50) NOT NULL
+  `idPersona` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -45,7 +45,11 @@ INSERT INTO `credenciales` (`id`, `usuario`, `password`, `idPersona`) VALUES
 (2, 'pepe', 'pepe123', 1),
 (3, 'luis', 'luis123', 4),
 (4, 'admin', '', 3),
-(5, 'gerald', 'gerald123', 5);
+(5, 'gerald', 'gerald123', 5),
+(6, 'alberto', 'alberto123', 6),
+(7, 'pepe1234', 'pepe12', 7),
+(8, 'manuela123', 'manuela123456', 8),
+(9, 'josean', 'qwert123', 9);
 
 -- --------------------------------------------------------
 
@@ -68,7 +72,16 @@ INSERT INTO `ejemplares` (`id`, `nombre`, `idplanta`) VALUES
 (2, 'GRSOL_2', 'GRSOL'),
 (3, 'MARGARITA_3', 'MARGARITA'),
 (4, 'DL_4', 'DL'),
-(5, 'LVD_5', 'LVD');
+(5, 'LVD_5', 'LVD'),
+(6, 'DL_6', 'DL'),
+(7, 'TLP_7', 'TLP'),
+(8, 'TLP_8', 'TLP'),
+(9, 'TLP_9', 'TLP'),
+(10, 'MNT_10', 'MNT'),
+(11, 'LVD_11', 'LVD'),
+(12, 'MARGARITA_12', 'MARGARITA'),
+(13, 'MNT_13', 'MNT'),
+(14, 'MNZLL_14', 'MNZLL');
 
 -- --------------------------------------------------------
 
@@ -93,7 +106,18 @@ INSERT INTO `mensajes` (`id`, `fechaHora`, `mensaje`, `idEjemplar`, `idPersona`)
 (3, '2024-11-04 10:17:25', 'nuevo mensaje para el ejemplar 1 de girasol', 1, 5),
 (4, '2024-11-04 10:50:43', 'nuevo ejemplar de margaritas', 3, 2),
 (5, '2024-11-04 10:54:51', 'nuevo mensaje para el diente de leon', 4, 3),
-(6, '2024-11-04 10:55:30', 'nuevo mensaje para un ejemplar de la planta lavanda', 5, 4);
+(6, '2024-11-04 10:55:30', 'nuevo mensaje para un ejemplar de la planta lavanda', 5, 4),
+(9, '2024-11-05 13:09:32', 'nuevo mensaje a un ejemplar de tulipan', 7, 3),
+(12, '2024-11-05 14:18:14', 'la menta esta creciendo', 10, 3),
+(13, '2024-11-06 12:26:48', 'la margarita_3 ha crecido', 3, 3),
+(14, '2024-11-06 12:30:49', 'Nuevo ejemplar de Lavanda creado.', 11, 3),
+(15, '2024-11-06 12:31:49', 'este ejemplar ha sido regado', 6, 3),
+(16, '2024-11-07 12:46:55', 'Nuevo ejemplar de Margarita creado.', 12, 3),
+(17, '2024-11-07 12:48:17', 'este ejemplar ha crecido', 12, 3),
+(18, '2024-11-07 12:50:50', 'Nuevo ejemplar de Menta creado.', 13, 2),
+(19, '2024-11-07 12:51:36', 'este ejemplar necesita agua', 12, 2),
+(20, '2024-11-07 13:25:55', 'Nuevo ejemplar de Manzanilla creado.', 14, 3),
+(21, '2024-11-07 13:26:43', 'este es el primer ejemplar de manzanilla', 14, 3);
 
 -- --------------------------------------------------------
 
@@ -103,7 +127,7 @@ INSERT INTO `mensajes` (`id`, `fechaHora`, `mensaje`, `idEjemplar`, `idPersona`)
 
 CREATE TABLE `personas` (
   `id` int(11) NOT NULL,
-  `nombre` varchar(25) NOT NULL,
+  `nombre` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -112,11 +136,15 @@ CREATE TABLE `personas` (
 --
 
 INSERT INTO `personas` (`id`, `nombre`, `email`) VALUES
-(1, 'pepe', 'pepe@viviero.es'),
+(1, 'pepe', 'pepe_lop@vivero.es'),
 (2, 'sara', 'sara@vivero.es'),
 (3, 'admin', 'admin@viviero.es'),
 (4, 'luis', 'luis@viviero.es'),
-(5, 'gerald', 'gerald@vivero.es');
+(5, 'gerald', 'gerald@vivero.es'),
+(6, 'alberto', 'alberto123@vivero.es'),
+(7, 'pepe', 'pepe@vivero.es'),
+(8, 'manuela', 'manuela@vivero.es'),
+(9, 'Jose Antonio', 'jo_antonio@vivero.es');
 
 -- --------------------------------------------------------
 
@@ -136,10 +164,13 @@ CREATE TABLE `plantas` (
 
 INSERT INTO `plantas` (`codigo`, `nombrecomun`, `nombrecientifico`) VALUES
 ('DL', 'Diente de león', 'Taraxacum officinale'),
-('GRSOL', 'girasol', 'girasolarium'),
+('GRSOL', 'Girasol', 'Helianthus annuus'),
 ('LVD', 'Lavanda', 'Lavandula angustifolia'),
-('MARGARITA', 'marga', 'margarita'),
-('ROSA', 'rosaa', 'rosaemarin');
+('MARGARITA', 'Margarita', 'Margaritarium'),
+('MNT', 'Menta', 'Mentha spp'),
+('MNZLL', 'Manzanilla', 'Matricaria chamomilla'),
+('ROSA', 'Rosa', 'Rosarium'),
+('TLP', 'Tulipan', 'Tulipanius');
 
 --
 -- Índices para tablas volcadas
@@ -189,25 +220,25 @@ ALTER TABLE `plantas`
 -- AUTO_INCREMENT de la tabla `credenciales`
 --
 ALTER TABLE `credenciales`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `ejemplares`
 --
 ALTER TABLE `ejemplares`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `mensajes`
 --
 ALTER TABLE `mensajes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT de la tabla `personas`
 --
 ALTER TABLE `personas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Restricciones para tablas volcadas

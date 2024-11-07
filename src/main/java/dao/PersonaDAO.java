@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 import modelo.Persona;
 
@@ -57,7 +56,6 @@ public class PersonaDAO {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			// System.out.println("Error al crear la persona.");
 		}
 
 		return id;
@@ -66,26 +64,22 @@ public class PersonaDAO {
 
 	public boolean existeEmail(String email) {
 
-		String sqlString = "SELECT email FROM PERSONAS";
-		ArrayList<String> emails = new ArrayList<String>();
+		String sqlString = "SELECT COUNT(*) FROM PERSONAS WHERE LOWER(email) = LOWER(?)";
 
 		try {
 			PreparedStatement pStatement = con.prepareStatement(sqlString);
+			pStatement.setString(1, email);
 			ResultSet rs = pStatement.executeQuery();
 
-			while (rs.next()) {
-				emails.add(rs.getString(1));
+			if (rs.next() && rs.getInt(1) > 0) {
+				return true; 
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
-		if (emails.contains(email)) {
-			return true;
-		} else {
-			return false;
-		}
+		return false;
 
 	}
 

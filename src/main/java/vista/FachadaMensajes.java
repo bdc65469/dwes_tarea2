@@ -165,6 +165,8 @@ public class FachadaMensajes {
 
 							System.out.print("Introduce la fecha final (dd/MM/yy HH:mm:ss). Si no introduces nada, cogerá la fecha y hora actuales: ");
 							String inputFinal = teclado.nextLine();
+							
+							//Si no introducimos ninguna fecha final, pone la actual
 							if (inputFinal.trim().isEmpty()) {
 								fechaFinal = LocalDateTime.now();
 							} else {
@@ -182,8 +184,6 @@ public class FachadaMensajes {
 								System.err.println("La fecha inicial debe ser anterior a la fecha final.");
 								continue;
 							}
-
-							// Si todas las condiciones se cumplen, salir del bucle
 							break;
 
 						} catch (DateTimeParseException e) {

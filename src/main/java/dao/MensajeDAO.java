@@ -33,7 +33,6 @@ public class MensajeDAO {
 			statement.setLong(3, mensaje.getIdEjemplar()); 
 			statement.setLong(4, mensaje.getIdPersona()); 
 
-			// Ejecutar la inserción
 			filasInsertadas = statement.executeUpdate();
 
 		} catch (SQLException e) {

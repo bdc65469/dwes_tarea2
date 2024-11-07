@@ -13,7 +13,7 @@ public class Comprobaciones {
 	 * @return true si es correcto, false si es incorrecto
 	 */
 	public boolean verificarNombrePersona(String nombre) {						
-		return nombre != null && nombre.matches("^[a-zA-ZÀ-ÿÑñ']+( [a-zA-ZÀ-ÿÑñ']+)*$");		
+		return nombre != null && nombre.matches("^[a-zA-ZÀ-ÿÑñ']+( [a-zA-ZÀ-ÿÑñ']+)*$") && nombre.length() <= 50;		
 	}
 	
 	/**
